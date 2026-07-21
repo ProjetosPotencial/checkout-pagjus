@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout · PagJus</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%230A0D16%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2258%25%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2216%22%20font-weight%3D%22900%22%20fill%3D%22%23FF5500%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3EJ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ===== Identidade PagJus (tema claro) ===== */
+    --ink:#0A0D16;            /* navy quase preto — texto forte / botão principal */
+    --ink-2:#161A24;          /* navy elevado (gradiente do botão) */
+    --orange:#FF5500;         /* Laranja PagJus — acento / links / destaques */
+    --orange-2:#FF7A33;       /* Laranja claro (gradientes/hover) */
+    --green:#1F9D57;          /* Verde PagJus — valores recebidos / sucesso */
+    --red:#CF001E;            /* Vermelho PagJus (text-destructive oklch .535/.222/25) — vencido / débito / negativo */
+    --text-strong:rgba(10,13,22,.92); /* títulos / valores */
+    --text:rgba(10,13,22,.74);        /* corpo e labels */
+    --muted:rgba(10,13,22,.56);       /* auxiliar */
+    --line:#EAE8E2;
+    --line-2:#E1DED6;
+    --bg:#F5F4F1;             /* off-white quente (papel) */
+    --field:#FAFAF7;
+    --card:#FFFFFF;
+    --grad:linear-gradient(100deg,#FF5500 0%,#FF7A33 48%,#1F9D57 100%);
+    --grad-soft:linear-gradient(120deg,rgba(255,85,0,.08),rgba(255,122,51,.06));
+    --radius:22px;
+    --radius-sm:14px;
+    --shadow:0 18px 46px -24px rgba(10,13,22,.20), 0 4px 14px -8px rgba(10,13,22,.08);
+    --shadow-sm:0 6px 20px -14px rgba(10,13,22,.16);
+    --focus:0 0 0 4px rgba(255,85,0,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Inter",system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(1100px 620px at 88% -8%,rgba(255,85,0,.07),transparent 58%),
+      radial-gradient(900px 540px at 4% 106%,rgba(31,157,87,.05),transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--text);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;
+  }
+  /* ===== Wordmark PagJus (Pag = ink, Jus = laranja) ===== */
+  .wordmark{font-family:"Inter",sans-serif;font-weight:900;letter-spacing:-.02em;line-height:1;display:inline-flex;align-items:baseline}
+  .wordmark .w-pag{color:var(--ink)}
+  .wordmark .w-jus{color:var(--orange)}
+
+  /* ===================== SHELL (app PagJus) ===================== */
+  .shell{display:flex;align-items:stretch;min-height:100vh}
+
+  /* -------- Barra lateral (menu do app) -------- */
+  .sidebar{flex:0 0 262px;width:262px;padding:16px 0 16px 16px;display:none}
+  .sidebar-inner{
+    position:sticky;top:16px;height:calc(100vh - 32px);
+    background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;padding:20px 16px;
+  }
+  .side-top{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 4px 6px;margin-bottom:20px}
+  .logo{display:flex;align-items:center;gap:2px}
+  .side-logo{font-size:22px}
+  .collapse{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--muted);cursor:pointer}
+  .nav{display:flex;flex-direction:column;gap:3px;overflow-y:auto;flex:1;margin:0 -4px;padding:0 4px}
+  .nav::-webkit-scrollbar{width:0}
+  .nav a{
+    display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;
+    color:var(--text);font-weight:600;font-size:13.5px;text-decoration:none;transition:.14s;position:relative
+  }
+  .nav a svg{flex:0 0 auto;opacity:.65}
+  .nav a:hover{background:#f2f1ec;color:var(--ink)}
+  .nav a:hover svg{opacity:1}
+  .nav a.active{background:linear-gradient(90deg,rgba(255,85,0,.12),rgba(255,85,0,.03));color:var(--ink);box-shadow:inset 2px 0 0 var(--orange)}
+  .nav a.active svg{opacity:1;color:var(--orange)}
+  .nav a .badge{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.4px;color:var(--orange);background:rgba(255,85,0,.12);padding:3px 7px;border-radius:999px}
+  .nav .sep{height:1px;background:var(--line);margin:10px 6px}
+  .side-promo{
+    margin-top:14px;border-radius:16px;padding:16px;color:#e7e6e1;position:relative;overflow:hidden;
+    background:linear-gradient(150deg,#181b26,#0A0D16);border:1px solid rgba(255,255,255,.06)
+  }
+  .side-promo::after{content:"";position:absolute;inset:0;background:radial-gradient(120px 80px at 90% 0,rgba(255,85,0,.32),transparent 70%),radial-gradient(120px 80px at 0 100%,rgba(31,157,87,.22),transparent 70%)}
+  .side-promo .sp-t{position:relative;z-index:1;font-weight:700;font-size:13px}
+  .side-promo .sp-s{position:relative;z-index:1;font-size:11.5px;color:rgba(255,255,255,.55);margin:4px 0 12px}
+  .side-promo .sp-btn{position:relative;z-index:1;display:block;text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:12px;padding:9px;border-radius:10px;text-decoration:none}
+
+  /* -------- Área de conteúdo -------- */
+  .content{flex:1;min-width:0;display:flex;flex-direction:column}
+  .mobtop{display:block;padding:22px 30px 0}
+  .mobile-logo{display:flex}
+  .mobile-logo .side-logo{font-size:20px}
+
+  .wrap{max-width:1060px;width:100%;margin:0 auto;padding:26px 30px 64px}
+
+  /* -------- Box com dados do usuário -------- */
+  .userbox{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:16px 22px;margin-bottom:24px}
+  .userbox .uavatar{width:46px;height:46px;border-radius:50%;background:rgba(255,85,0,.10);color:var(--orange);display:grid;place-items:center;font-family:"Inter";font-weight:800;font-size:15px;flex:0 0 auto;border:1px solid rgba(255,85,0,.18)}
+  .userbox .uinfo{min-width:0}
+  .uname{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--text-strong)}
+  .pjbadge{font-size:10px;font-weight:800;color:#227a41;background:rgba(31,157,87,.14);border-radius:999px;padding:3px 8px;letter-spacing:.3px}
+  .ulevel{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .ulevel b{color:var(--text);font-weight:700}
+  .uprogress{height:5px;width:210px;max-width:42vw;background:#ecebe6;border-radius:999px;margin-top:9px;overflow:hidden}
+  .uprogress i{display:block;height:100%;width:62%;background:var(--grad);border-radius:999px}
+  .uactions{margin-left:auto;display:flex;align-items:center;gap:4px;flex:0 0 auto}
+  .iconbtn{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:var(--muted);background:transparent;border:0;cursor:pointer;transition:.14s}
+  .iconbtn:hover{background:#f2f1ec;color:var(--ink)}
+  .iconbtn.logout{color:var(--red)}
+  .divider-v{width:1px;height:22px;background:var(--line);margin:0 6px}
+
+  /* -------- Título da página -------- */
+  .pagehead{margin:0 2px 22px}
+  .pagehead h1{font-family:"Inter";font-weight:800;font-size:26px;color:var(--text-strong);letter-spacing:-.4px;line-height:1.15}
+  .pagehead p{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:24px;align-items:start}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .pad{padding:26px 28px}
+  .col-left{position:sticky;top:16px}
+
+  /* ---- Resumo / pedido ---- */
+  .secure-pill{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:#0e7c54;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.22);padding:5px 11px;border-radius:999px}
+
+  .order{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+  .order-head{display:flex;align-items:flex-start;gap:12px;padding:18px;cursor:pointer;background:var(--grad-soft)}
+  .order-head .oh-label{font-size:13px;color:var(--muted);font-weight:500}
+  .order-head .oh-value{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin-top:2px}
+  .oh-main{flex:1;min-width:0}
+  .due-pill{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(207,0,30,.10);color:var(--red);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid rgba(207,0,30,.22)}
+  .due-pill svg{opacity:.9}
+
+  /* Detalhamento da guia — recolhível (lido do código de barras) */
+  .conta-detail{padding:16px 18px;border-top:1px solid var(--line);max-height:420px;overflow:hidden;transition:max-height .3s ease,opacity .25s,padding .3s,border-color .3s}
+  .order.collapsed .conta-detail{max-height:0;opacity:0;padding-top:0;padding-bottom:0;border-top-color:transparent}
+  .ben-title{font-weight:700;color:var(--text-strong);font-size:14.5px}
+  .ben-org{color:var(--muted);font-size:13px;margin-top:2px}
+  .ben-recv{color:var(--muted);font-size:12.5px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .ben-recv .sep{opacity:.45;margin:0 6px}
+
+  /* Linha digitável (padrão PagJus) */
+  .digit-wrap{margin-top:14px}
+  .digit-label{font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .digit-box{display:flex;align-items:center;gap:10px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .digit-box code{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--text-strong);word-break:break-all;line-height:1.4;flex:1}
+  .digit-copy{display:inline-flex;align-items:center;gap:5px;color:var(--orange);font-weight:700;font-size:11.5px;background:none;border:0;cursor:pointer;flex:0 0 auto;transition:.14s}
+  .digit-copy:hover{color:var(--orange-2)}
+
+  .ben-line{display:flex;align-items:center;gap:11px;margin:14px 0 16px;font-size:11.5px;color:var(--text);background:var(--grad-soft);border-radius:10px;padding:11px 13px;line-height:1.35}
+  .ben-line svg{flex:0 0 auto;color:var(--orange)}
+  .ben-line span{text-wrap:balance}
+  .ben-line b{font-weight:700;color:var(--text-strong)}
+
+  .chev{margin-left:auto;width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;color:var(--muted);flex:0 0 auto;transition:transform .25s}
+  .order.collapsed .chev{transform:rotate(-90deg)}
+
+  /* Resumo — sempre visível */
+  .resumo{padding:14px 18px 6px;border-top:1px solid var(--line)}
+  .sum-title{font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 10px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;font-size:14px}
+  .row:last-child{border-bottom:0}
+  .row .k{color:var(--text)}
+  .row .v{font-weight:600;font-variant-numeric:tabular-nums;font-family:"JetBrains Mono",monospace;color:var(--text-strong)}
+  .row .v.fee{color:var(--red)}
+  .row.total{padding-top:16px;margin-top:4px;border-top:1px solid var(--line);border-bottom:0;align-items:center}
+  .row.total .k{font-weight:700;font-size:14px;color:var(--text-strong)}
+  .row.total .tt{text-align:right}
+  .row.total .tt .big{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:22px;color:var(--ink);line-height:1;white-space:nowrap}
+  .row.total .tt .big .mult{font-size:13px;font-weight:600;color:var(--muted)}
+  .row.total .tt .small{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .poweredby{display:flex;align-items:center;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+  .poweredby .pb-logo{font-size:15px}
+  .poweredby .pb-sep{opacity:.5}
+  .poweredby .pot-img{height:20px;width:auto;display:block;flex:0 0 auto}
+  /* Logo Potencial Tecnologia (recriado em vetor) */
+  .pot-logo{display:inline-flex;align-items:center;gap:7px}
+  .pot-logo .pot-emblem{height:24px;width:auto;display:block;flex:0 0 auto}
+  .pot-logo .pot-word{display:flex;flex-direction:column;line-height:1}
+  .pot-logo .pot-word .pw-1{font-weight:800;font-size:12.5px;letter-spacing:.01em;color:#141414}
+  .pot-logo .pot-word .pw-2{font-weight:600;font-size:7px;letter-spacing:.30em;color:#141414;margin-top:2px}
+
+  /* ===== Formulário ===== */
+  .pay-title h2{font-family:"Inter";font-weight:700;font-size:20px;color:var(--text-strong);letter-spacing:-.2px}
+  .pay-sub{color:var(--muted);font-size:13px;margin:6px 0 22px}
+
+  .field{margin-bottom:18px}
+  .field > label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px}
+  .field .req{color:var(--orange)}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:6px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px}
+
+  .control{position:relative}
+  input,select{width:100%;font-family:inherit;font-size:14.5px;color:var(--text-strong);background:var(--field);border:1.5px solid var(--line);border-radius:13px;padding:14px 15px;transition:.16s;outline:none}
+  input::placeholder{color:rgba(10,13,22,.42)}
+  input:focus,select:focus{border-color:var(--orange);background:#fff;box-shadow:var(--focus)}
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 15px center;padding-right:42px;cursor:pointer}
+  .card-input{padding-right:172px}
+  .card-brands{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;gap:4px;align-items:center}
+  .card-brands .brand-ico{height:26px;width:auto;display:block}
+  @media(max-width:520px){.card-input{padding-right:160px}.card-brands{gap:3px}.card-brands .brand-ico{height:24px}}
+  .parcelas-wrap select{font-weight:600}
+  .divider{height:1px;background:var(--line);margin:24px 0}
+  .sec-label{font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+  .terms{display:flex;gap:12px;align-items:flex-start;margin:8px 0 20px;font-size:12.5px;color:var(--text);line-height:1.5}
+  .terms input{width:20px;height:20px;flex:0 0 auto;margin-top:1px;accent-color:var(--orange);cursor:pointer}
+  .terms a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+  /* Botão principal na identidade PagJus (navy — igual ao "Pagar" do app) */
+  .paybtn{width:100%;border:0;cursor:pointer;color:#fff;font-family:"Inter";font-weight:700;font-size:16.5px;padding:18px;border-radius:14px;background:linear-gradient(180deg,var(--ink-2),var(--ink));position:relative;overflow:hidden;box-shadow:0 14px 30px -14px rgba(10,13,22,.55);transition:transform .12s,box-shadow .2s;letter-spacing:.1px;display:flex;align-items:center;justify-content:center;gap:10px}
+  .paybtn:hover{transform:translateY(-1px);box-shadow:0 20px 40px -14px rgba(10,13,22,.6)}
+  .paybtn:active{transform:translateY(0)}
+  .paybtn .paybtn-arrow{transition:transform .18s}
+  .paybtn:hover .paybtn-arrow{transform:translateX(3px)}
+
+  .footsecure{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:12.5px;margin-top:16px;font-weight:500}
+  .support{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.7}
+  .support a{color:var(--text);text-decoration:none}
+  .brandstrip{height:6px;width:100%;background:#FF5500;position:fixed;bottom:0;left:0;z-index:1300}
+
+  .transp-note{display:flex;align-items:center;justify-content:center;gap:7px;color:var(--muted);font-size:11.5px;margin-top:8px;font-weight:500}
+  .transp-note svg{flex:0 0 auto;color:var(--green)}
+
+  /* ===== Telas de resultado (Sucesso / Erro) ===== */
+  .result{position:fixed;inset:0;z-index:1200;overflow-y:auto;display:none;
+    background:radial-gradient(1100px 620px at 88% -8%,rgba(255,85,0,.07),transparent 58%),radial-gradient(900px 540px at 4% 106%,rgba(31,157,87,.05),transparent 60%),var(--bg)}
+  .result.is-open{display:block}
+  .result__wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;padding:40px 24px 80px}
+  .result__top{margin-bottom:24px}
+  .result__top .wordmark{font-size:26px}
+  .result__card{width:min(440px,100%);background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:36px 32px;text-align:center}
+  .result__ico{width:70px;height:70px;border-radius:50%;margin:0 auto 20px;display:grid;place-items:center}
+  .result__ico svg{width:34px;height:34px}
+  .result__ico.ok{background:rgba(31,157,87,.12);color:var(--green);border:1px solid rgba(31,157,87,.28)}
+  .result__ico.err{background:rgba(207,0,30,.10);color:var(--red);border:1px solid rgba(207,0,30,.26)}
+  .result__title{font-family:"Inter";font-weight:800;font-size:23px;color:var(--text-strong);letter-spacing:-.3px}
+  .result__sub{font-size:13px;color:var(--muted);margin:8px auto 0;line-height:1.5;max-width:330px}
+  .result__amount{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:33px;color:var(--ink);margin-top:22px;line-height:1;white-space:nowrap}
+  .result__amount-sub{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .result__box{background:var(--field);border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin:22px 0 4px;text-align:left}
+  .result__row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:12.5px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .result__row:last-child{border-bottom:0}
+  .result__row .k{color:var(--muted);white-space:nowrap}
+  .result__row .v{font-weight:700;color:var(--text-strong);text-align:right}
+  .result__row .v.ok{color:var(--green)}
+  .result__row .v.err{color:var(--red)}
+  .result__row .v.mono{font-family:"JetBrains Mono",monospace}
+  .rbtn{width:100%;margin-top:12px;border:1.5px solid transparent;cursor:pointer;font-family:"Inter";font-weight:700;font-size:15px;padding:15px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:9px;transition:.14s}
+  .rbtn.primary{color:#fff;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+  .rbtn.primary:hover{transform:translateY(-1px)}
+  .rbtn.outline{background:var(--card);border-color:var(--line-2);color:var(--text-strong)}
+  .rbtn.outline:hover{background:var(--field)}
+  .rbtn svg{width:16px;height:16px}
+  .result__foot{font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.6}
+  .result__foot a{color:var(--text);font-weight:600;text-decoration:underline}
+
+  /* ===== Cards Total a pagar / Saldo (padrão PagJus) ===== */
+  .summary-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .scard{background:var(--field);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+  .scard.total{background:linear-gradient(180deg,rgba(207,0,30,.05),rgba(207,0,30,.02));border-color:rgba(207,0,30,.20)}
+  .scard .s-label{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .scard .s-value{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:22px;color:var(--text-strong);margin-top:6px;line-height:1.1;white-space:nowrap}
+  .scard.saldo .s-value{color:var(--red)}
+  .scard .s-hint{font-size:11px;color:var(--muted);margin-top:2px}
+
+  .btn-hist{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;color:var(--orange);font-weight:700;font-size:13px;cursor:pointer;transition:.14s;margin-bottom:22px}
+  .btn-hist:hover{background:rgba(255,85,0,.05);border-color:rgba(255,85,0,.30)}
+
+  .sec-hd{display:flex;align-items:center;gap:9px;margin:0 2px 12px;color:var(--text-strong);font-weight:700;font-size:14.5px}
+  .sec-hd svg{color:var(--muted)}
+  .sec-hd .count{font-size:11px;font-weight:800;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:999px;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+  .sec-hd + .sec-hd{margin-top:22px}
+
+  /* Card de guia (Pagamentos a fazer) */
+  .bill{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:12px;background:var(--card);transition:border-color .16s,box-shadow .16s}
+  .bill.selected{border-color:rgba(255,85,0,.45);box-shadow:0 0 0 3px rgba(255,85,0,.08)}
+  .bill-head{display:flex;align-items:flex-start;gap:12px;padding:15px 16px}
+  .bill-check{width:20px;height:20px;flex:0 0 auto;margin-top:2px;accent-color:var(--ink);cursor:pointer}
+  .bill-main{flex:1;min-width:0;cursor:pointer}
+  .bill-top{display:flex;align-items:flex-start;gap:10px}
+  .bill-title{font-weight:700;font-size:13.5px;color:var(--text-strong);line-height:1.3;flex:1;min-width:0}
+  .bill-value{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:14px;color:var(--text-strong);white-space:nowrap}
+  .venc{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:rgba(207,0,30,.10);color:var(--red);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid rgba(207,0,30,.20)}
+  .bill-chev{width:26px;height:26px;flex:0 0 auto;display:grid;place-items:center;color:var(--muted);cursor:pointer;transition:transform .25s;align-self:center}
+  .bill.collapsed .bill-chev{transform:rotate(-90deg)}
+  .bill-body{padding:0 16px 16px 48px;max-height:600px;overflow:hidden;transition:max-height .3s ease,opacity .25s,padding .3s}
+  .bill.collapsed .bill-body{max-height:0;opacity:0;padding-top:0;padding-bottom:0}
+  .fld-label{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:14px 0 6px}
+  .fld-label:first-child{margin-top:0}
+  .prov{font-size:12.5px;color:var(--text-strong);font-weight:600;line-height:1.4}
+  .itens-box{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--field);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:12.5px;color:var(--text-strong);font-weight:600}
+  .itens-box .it-val{color:var(--muted);font-family:"JetBrains Mono",monospace}
+  .doc-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .doc-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer;transition:.14s}
+  .doc-btn:hover{background:var(--field);color:var(--ink);border-color:var(--line-2)}
+  .doc-btn svg{color:var(--muted)}
+
+  /* Saldo a quitar */
+  .bill.saldo-item .bill-body{padding-left:48px}
+  .bill.saldo-item .bill-value{color:var(--red)}
+  .venc.owe{background:rgba(207,0,30,.10)}
+  .saldo-note{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+  .saldo-link{display:inline-flex;align-items:center;gap:6px;color:var(--orange);font-weight:700;font-size:12px;cursor:pointer;background:none;border:0}
+  .bill-check[disabled]{cursor:not-allowed;opacity:.5}
+
+  /* ===================== Responsivo ===================== */
+  @media(max-width:1024px){
+    .sidebar{display:none}
+    .mobtop{display:block}
+    .wrap{padding:16px 22px 64px}
+  }
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr;gap:18px}
+    .col-left{position:static}
+  }
+  @media(max-width:640px){
+    .userbox{flex-wrap:wrap}
+    .uactions{margin-left:0;width:100%;justify-content:flex-start;border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+    .uprogress{max-width:60vw}
+  }
+  @media(max-width:520px){
+    .pad{padding:18px}
+    /* Campos empilhados (1 por linha) no mobile */
+    .grid2,.grid3{grid-template-columns:1fr}
+    .grid3 .span2{grid-column:auto}
+    /* Cards Total a pagar / Saldo — evita quebra do valor */
+    .summary-cards{gap:10px}
+    .scard{padding:12px 13px}
+    .scard .s-label{font-size:9.5px;letter-spacing:.6px}
+    .scard .s-value{font-size:16px}
+    .scard .s-hint{font-size:10px}
+    /* Guia — título em cima, valor embaixo (sem espremer) */
+    .bill-head{gap:10px;padding:14px}
+    .bill-top{flex-direction:column;gap:4px}
+    .bill-title{font-size:13px}
+    .bill-value{font-size:14px}
+    .bill-body{padding:0 14px 14px 14px}
+    .bill.collapsed .bill-body{padding-top:0;padding-bottom:0}
+    .digit-box code{font-size:10px}
+    .sec-hd{font-size:13.5px}
+    /* Telas de resultado */
+    .result__wrap{padding:28px 18px 70px}
+    .result__card{padding:28px 22px}
+    .result__amount{font-size:28px}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== MENU LATERAL (app PagJus) ===================== -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="side-top">
+        <div class="logo" aria-label="PagJus">
+          <span class="wordmark side-logo"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span>
+        </div>
+        <button class="collapse" aria-label="Recolher menu">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
+
+      <nav class="nav">
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Painel</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>Guias judiciais</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l3 1m0 0l-3 9a5 5 0 0 0 6 0l-3-9m0 0l6-2m6 2l3-1m-3 1l-3 9a5 5 0 0 0 6 0l-3-9m0 0l3-1m-9-3v13m0-13V4"/></svg>Processos</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Links de pagamento</a>
+        <a href="#" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Pagamentos</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 8a4 4 0 0 0 0 8m0-8a4 4 0 0 1 0 8m0 0v4"/><circle cx="12" cy="12" r="10"/></svg>Recebíveis</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Transações</a>
+        <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Relatórios<span class="badge">IA</span></a>
+      </nav>
+
+      <div class="side-promo">
+        <div class="sp-t">PagJus — Potencial Tecnologia</div>
+        <div class="sp-s">Versão 1.2.0 · Sessão segura ativa</div>
+        <a href="#" class="sp-btn">Saiba mais</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== CONTEÚDO ===================== -->
+  <div class="content">
+    <div class="mobtop">
+      <div class="mobile-logo logo" aria-label="PagJus">
+        <span class="wordmark side-logo"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span>
+      </div>
+    </div>
+
+    <main class="wrap">
+
+      <!-- Box com dados do usuário (igual ao app PagJus) -->
+      <div class="userbox">
+        <div class="uavatar">AT</div>
+        <div class="uinfo">
+          <div class="uname">Aura Tecnologia <span class="pjbadge">PJ</span></div>
+          <div class="ulevel">CNPJ 12.345.678/0001-90</div>
+        </div>
+        <div class="uactions">
+          <button class="iconbtn" aria-label="Configurações"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <button class="iconbtn" aria-label="Idioma"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></button>
+          <button class="iconbtn" aria-label="Notificações"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+          <span class="divider-v"></span>
+          <button class="iconbtn logout" aria-label="Sair"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Título da página -->
+      <div class="pagehead">
+        <h1>Pagamento de guia</h1>
+        <p>Pague guias e débitos judiciais de forma rápida e segura.</p>
+      </div>
+
+      <div class="grid">
+
+        <!-- ======= RESUMO / GUIAS ======= -->
+        <section class="col-left">
+          <div class="card pad">
+
+            <!-- Total a pagar / Saldo -->
+            <div class="summary-cards">
+              <div class="scard total">
+                <div class="s-label">Total a pagar</div>
+                <div class="s-value" id="totalPagar">R$ 0,00</div>
+                <div class="s-hint"><span id="selCount">0</span> selecionado(s)</div>
+              </div>
+              <div class="scard saldo">
+                <div class="s-label">Saldo</div>
+                <div class="s-value">-R$ 66,89</div>
+                <div class="s-hint">você deve</div>
+              </div>
+            </div>
+
+            <button class="btn-hist" type="button" id="histBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>
+              Histórico e extrato
+            </button>
+
+            <!-- Pagamentos a fazer -->
+            <div class="sec-hd">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Pagamentos a fazer
+            </div>
+
+            <!-- Guia 1 -->
+            <div class="bill selected" data-valor="300.00">
+              <div class="bill-head">
+                <input type="checkbox" class="bill-check" checked aria-label="Selecionar guia">
+                <div class="bill-main">
+                  <div class="bill-top">
+                    <div class="bill-title">Outro · Tribunal Regional do Trabalho</div>
+                    <div class="bill-value">R$ 300,00</div>
+                  </div>
+                  <span class="venc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg>Vencido em 16/09/2025</span>
+                </div>
+                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+              <div class="bill-body">
+                <div class="fld-label">Linha digitável</div>
+                <div class="digit-box">
+                  <code>85840000003 5000028018 7640001052 4636237540 001831</code>
+                  <button class="digit-copy" type="button" aria-label="Copiar linha digitável">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span>Copiar</span>
+                  </button>
+                </div>
+                <div class="fld-label">Fornecedor</div>
+                <div class="prov">TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
+                <div class="fld-label">Itens</div>
+                <div class="itens-box"><span>1 item</span><span class="it-val">R$ 300,00</span></div>
+                <div class="fld-label">Documento</div>
+                <div class="doc-btns">
+                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver</button>
+                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Guia 2 -->
+            <div class="bill selected collapsed" data-valor="1200.00">
+              <div class="bill-head">
+                <input type="checkbox" class="bill-check" checked aria-label="Selecionar guia">
+                <div class="bill-main">
+                  <div class="bill-top">
+                    <div class="bill-title">GRU Judicial · Tribunal Regional do Trabalho</div>
+                    <div class="bill-value">R$ 1.200,00</div>
+                  </div>
+                  <span class="venc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg>Vencido em 20/02/2026</span>
+                </div>
+                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+              <div class="bill-body">
+                <div class="fld-label">Linha digitável</div>
+                <div class="digit-box">
+                  <code>85853000012 2000028018 7640001052 4636237540 001831</code>
+                  <button class="digit-copy" type="button" aria-label="Copiar linha digitável">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span>Copiar</span>
+                  </button>
+                </div>
+                <div class="fld-label">Fornecedor</div>
+                <div class="prov">TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
+                <div class="fld-label">Itens</div>
+                <div class="itens-box"><span>1 item</span><span class="it-val">R$ 1.200,00</span></div>
+                <div class="fld-label">Documento</div>
+                <div class="doc-btns">
+                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver</button>
+                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Saldo a quitar -->
+            <div class="sec-hd">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg>
+              Saldo a quitar
+            </div>
+
+            <div class="bill saldo-item collapsed" data-valor="66.89">
+              <div class="bill-head">
+                <input type="checkbox" class="bill-check" aria-label="Saldo a quitar">
+                <div class="bill-main">
+                  <div class="bill-top">
+                    <div class="bill-title">Saldo a quitar</div>
+                    <div class="bill-value">R$ 66,89</div>
+                  </div>
+                  <span class="venc owe"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Você deve ao escritório</span>
+                </div>
+                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+              <div class="bill-body">
+                <div class="saldo-note">O escritório ainda não cadastrou uma chave PIX. Combine o pagamento diretamente com ele.</div>
+                <button class="saldo-link" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ver no extrato o que estou pagando</button>
+              </div>
+            </div>
+
+            <!-- Resumo do pagamento (cartão) -->
+            <div class="resumo" style="border-top:1px solid var(--line);margin-top:6px">
+              <div class="sum-title">Resumo do pagamento</div>
+              <div class="row"><span class="k">Valor selecionado</span><span class="v" id="sumTributo">R$ 1.500,00</span></div>
+              <div class="row"><span class="k">Taxa de serviço</span><span class="v fee" id="sumTaxa">R$ 462,75</span></div>
+              <div class="row total">
+                <span class="k">Valor total a pagar</span>
+                <span class="tt"><div class="big" id="sumInstall">12x R$ 163,56</div><div class="small" id="sumTotal">Total R$ 1.962,75</div></span>
+              </div>
+            </div>
+
+            <div class="ben-line">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+              <span>Dados preenchidos automaticamente pela leitura do <b>código de barras</b> das guias.</span>
+            </div>
+
+            <div class="poweredby">
+              <span>Processado por</span>
+              <span class="wordmark pb-logo"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span>
+              <span class="pb-sep">·</span>
+              <!-- LOGO POTENCIAL TECNOLOGIA — imagem oficial do site (Framer). Para versão 100% offline/embutida, troque o src por um data:URI da imagem enviada. -->
+              <img class="pot-img" id="potLogo" src="data:image/png;base64,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" alt="Potencial Tecnologia">
+            </div>
+          </div>
+        </section>
+
+        <!-- ======= PAGAMENTO ======= -->
+        <section class="card pad">
+          <div class="pay-title"><h2>Dados do pagador</h2></div>
+          <div class="pay-sub">Preencha os campos abaixo para concluir<br>o pagamento com segurança.</div>
+
+          <div class="grid2">
+            <div class="field"><label>E-mail <span class="req">*</span></label><input type="email" placeholder="voce@email.com.br"></div>
+            <div class="field"><label>Telefone <span class="req">*</span></label><input type="tel" placeholder="(11) 90000-0000"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field parcelas-wrap">
+            <label>Parcelas <span class="req">*</span></label>
+            <div class="control">
+              <select id="parcelas">
+                <option value="1">1x de R$ 392,55 sem juros</option>
+                <option value="3">3x de R$ 130,85</option>
+                <option value="6">6x de R$ 65,43</option>
+                <option value="10">10x de R$ 39,26</option>
+                <option value="12" selected>12x de R$ 32,71</option>
+              </select>
+            </div>
+            <div class="hint">* O valor mínimo da parcela é R$ 1,90</div>
+          </div>
+
+          <div class="field">
+            <label>Informações do cartão <span class="req">*</span></label>
+            <div class="control">
+              <input class="card-input" id="cardNum" inputmode="numeric" placeholder="1234 1234 1234 1234">
+              <div class="card-brands">
+                <svg class="brand-ico" width="70" height="48" viewBox="0 0 70 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Payment Method/Visa"> <g id=" Size=48"> <rect id="BASE" x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="white" stroke="#D9D9D9"/> <path id="visa-logo" fill-rule="evenodd" clip-rule="evenodd" d="M21.2505 32.5165H17.0099L13.8299 20.3847C13.679 19.8267 13.3585 19.3333 12.8871 19.1008C11.7106 18.5165 10.4142 18.0514 9 17.8169V17.3498H15.8313C16.7742 17.3498 17.4813 18.0514 17.5991 18.8663L19.2491 27.6173L23.4877 17.3498H27.6104L21.2505 32.5165ZM29.9675 32.5165H25.9626L29.2604 17.3498H33.2653L29.9675 32.5165ZM38.4467 21.5514C38.5646 20.7346 39.2717 20.2675 40.0967 20.2675C41.3931 20.1502 42.8052 20.3848 43.9838 20.9671L44.6909 17.7016C43.5123 17.2345 42.216 17 41.0395 17C37.1524 17 34.3239 19.1008 34.3239 22.0165C34.3239 24.2346 36.3274 25.3992 37.7417 26.1008C39.2717 26.8004 39.861 27.2675 39.7431 27.9671C39.7431 29.0165 38.5646 29.4836 37.3881 29.4836C35.9739 29.4836 34.5596 29.1338 33.2653 28.5494L32.5582 31.8169C33.9724 32.3992 35.5025 32.6338 36.9167 32.6338C41.2752 32.749 43.9838 30.6502 43.9838 27.5C43.9838 23.5329 38.4467 23.3004 38.4467 21.5514ZM58 32.5165L54.82 17.3498H51.4044C50.6972 17.3498 49.9901 17.8169 49.7544 18.5165L43.8659 32.5165H47.9887L48.8116 30.3004H53.8772L54.3486 32.5165H58ZM51.9936 21.4342L53.1701 27.1502H49.8723L51.9936 21.4342Z" fill="#172B85"/> </g> </g> </svg>
+                <svg class="brand-ico" width="70" height="48" viewBox="0 0 70 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Payment Method/Mastercard"> <g id=" Size=48"> <rect id="BASE" x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="white" stroke="#D9D9D9"/> <g id="Mastercard"> <path id="Left" fill-rule="evenodd" clip-rule="evenodd" d="M35.5 34.3139C33.1169 36.3704 30.0255 37.6119 26.6475 37.6119C19.1102 37.6119 13 31.4308 13 23.806C13 16.1811 19.1102 10 26.6475 10C30.0255 10 33.1169 11.2415 35.5 13.2981C37.8831 11.2415 40.9745 10 44.3525 10C51.8898 10 58 16.1811 58 23.806C58 31.4308 51.8898 37.6119 44.3525 37.6119C40.9745 37.6119 37.8831 36.3704 35.5 34.3139Z" fill="#ED0006"/> <path id="Right" fill-rule="evenodd" clip-rule="evenodd" d="M35.5 34.3139C38.4344 31.7816 40.2951 28.0136 40.2951 23.806C40.2951 19.5983 38.4344 15.8303 35.5 13.2981C37.8831 11.2415 40.9745 10 44.3524 10C51.8898 10 58 16.1811 58 23.806C58 31.4308 51.8898 37.6119 44.3524 37.6119C40.9745 37.6119 37.8831 36.3704 35.5 34.3139Z" fill="#F9A000"/> <path id="Middle" fill-rule="evenodd" clip-rule="evenodd" d="M35.5 13.2981C38.4344 15.8304 40.2951 19.5984 40.2951 23.806C40.2951 28.0136 38.4344 31.7816 35.5 34.3138C32.5657 31.7816 30.705 28.0136 30.705 23.806C30.705 19.5984 32.5657 15.8304 35.5 13.2981Z" fill="#FF5E00"/> </g> </g> </g> </svg>
+                <svg class="brand-ico" width="70" height="48" viewBox="0 0 70 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Payment Method/Amex"> <g id=" Size=48"> <rect id="BASE" x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="#1F72CD" stroke="#D9D9D9"/> <path id="AMEX" fill-rule="evenodd" clip-rule="evenodd" d="M12.5493 17L6 31.4935H13.8405L14.8125 29.1826H17.0342L18.0062 31.4935H26.6364V29.7298L27.4054 31.4935H31.8696L32.6386 29.6925V31.4935H50.587L52.7695 29.2426L54.813 31.4935L64.0317 31.5121L57.4617 24.2872L64.0317 17H54.956L52.8315 19.2093L50.8523 17H31.3268L29.6501 20.7409L27.9341 17H20.11V18.7037L19.2396 17H12.5493ZM39.3516 19.0581H49.6584L52.8108 22.4633L56.0648 19.0581H59.2172L54.4275 24.2852L59.2172 29.452H55.9218L52.7695 26.0073L49.4989 29.452H39.3516V19.0581ZM41.8968 23.1099V21.2114V21.2096H48.328L51.1342 24.2458L48.2036 27.2986H41.8968V25.226H47.5197V23.1099H41.8968ZM14.0664 19.0581H17.8883L22.2324 28.8862V19.0581H26.4191L29.7745 26.1048L32.8668 19.0581H37.0326V29.4581H34.4978L34.4771 21.3087L30.7817 29.4581H28.5142L24.7981 21.3087V29.4581H19.5836L18.595 27.1266H13.254L12.2675 29.4561H9.47358L14.0664 19.0581ZM14.166 24.9712L15.9256 20.8177L17.6832 24.9712H14.166Z" fill="white"/> </g> </g> </svg>
+                <svg class="brand-ico" width="70" height="48" viewBox="0 0 70 48" fill="none" xmlns="http://www.w3.org/2000/svg"> <g id="Payment Method/Elo"> <g id=" Size=48"> <rect id="BASE" x="0.5" y="0.5" width="69" height="47" rx="5.5" fill="white" stroke="#D9D9D9"/> <g id="Elo"> <path id="Elo_2" d="M23.8353 25.1111C23.274 27.8165 20.8374 29.8508 17.9169 29.8508C17.2469 29.8508 16.6019 29.7434 16.0001 29.5455L14.6587 33.4814C15.6824 33.818 16.7778 34 17.9169 34C22.8811 34 27.0219 30.5407 27.9762 25.9438L23.8353 25.1111Z" fill="#EC412A"/> <path id="Elo_3" fill-rule="evenodd" clip-rule="evenodd" d="M47.9051 16.2222V27.6028L49.9474 28.4214L48.9813 30.666L46.9616 29.8542C46.5075 29.6638 46.2002 29.3737 45.9667 29.046C45.7425 28.7107 45.5763 28.2525 45.5763 27.6341V16.2222H47.9051ZM32.416 24.6806C32.4668 21.4261 35.2383 18.8282 38.6014 18.8781C41.4559 18.9214 43.8209 20.8547 44.4421 23.4261L33.4022 27.9889C32.7609 27.0408 32.3964 25.9003 32.416 24.6806ZM34.9421 25.1369C34.927 25.0003 34.9162 24.8603 34.9203 24.7191C34.952 22.8016 36.5837 21.2716 38.5651 21.3034C39.6436 21.3173 40.6013 21.7949 41.2487 22.534L34.9421 25.1369ZM41.0163 27.2498C40.3509 27.8756 39.4486 28.257 38.4523 28.2433C37.7695 28.2322 37.1368 28.0345 36.5988 27.7051L35.2651 29.76C36.1785 30.3183 37.2555 30.6486 38.4165 30.666C40.1066 30.6903 41.647 30.0483 42.767 28.9883L41.0163 27.2498ZM56.405 21.3033C56.0072 21.3033 55.6248 21.3655 55.2676 21.4814L54.473 19.1787C55.0795 18.9829 55.729 18.8765 56.405 18.8765C59.3547 18.8765 61.8153 20.9026 62.3796 23.5941L59.9196 24.0791C59.5881 22.4951 58.1405 21.3033 56.405 21.3033ZM52.366 29.187L54.0282 27.3694C53.2858 26.7339 52.8184 25.8057 52.8184 24.7711C52.8184 23.7375 53.2858 22.8098 54.0275 22.1747L52.3641 20.3571C51.1031 21.437 50.3085 23.015 50.3085 24.7711C50.3085 26.5293 51.1037 28.1067 52.366 29.187ZM56.4048 28.2401C58.1388 28.2401 59.5862 27.0494 59.9196 25.4677L62.3789 25.9547C61.8119 28.6433 59.3519 30.6667 56.4048 30.6667C55.7284 30.6667 55.078 30.5599 54.4698 30.3632L55.2664 28.0613C55.6242 28.1769 56.0068 28.2401 56.4048 28.2401Z" fill="black"/> <path id="Elo_4" d="M11.0688 31.7778L13.5489 28.5755C12.4419 27.4557 11.7432 25.8209 11.7432 23.9987C11.7432 22.1779 12.4412 20.5431 13.548 19.4242L11.0665 16.2222C9.18543 18.1247 8 20.9036 8 23.9987C8 27.0954 9.18716 29.8754 11.0688 31.7778Z" fill="#1BA7DE"/> <path id="Elo_5" d="M15.9982 18.4506C16.6 18.2533 17.2437 18.1462 17.9134 18.1462C20.8365 18.1462 23.2747 20.1831 23.834 22.8889L27.9762 22.0604C27.0257 17.4617 22.8821 14 17.9134 14C16.7758 14 15.6809 14.1818 14.6587 14.5167L15.9982 18.4506Z" fill="#FECA2F"/> </g> </g> </g> </svg>
+              </div>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Validade (MM/AA) <span class="req">*</span></label><input id="exp" inputmode="numeric" placeholder="MM/AA"></div>
+            <div class="field"><label>CVV <span class="req">*</span></label><input id="cvv" inputmode="numeric" placeholder="123"></div>
+          </div>
+          <div class="field"><label>Nome (como está no cartão) <span class="req">*</span></label><input placeholder="NOME COMPLETO" style="text-transform:uppercase"></div>
+          <div class="field"><label>CPF/CNPJ do titular <span class="req">*</span></label><input id="doc" inputmode="numeric" placeholder="000.000.000-00"></div>
+
+          <div class="divider"></div>
+
+          <div class="sec-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF5500" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Endereço da fatura do cartão</div>
+          <div class="grid2">
+            <div class="field"><label>CEP <span class="req">*</span></label><input id="cep" inputmode="numeric" placeholder="00000-000"></div>
+            <div class="field"><label>Bairro <span class="req">*</span></label><input placeholder="Bairro"></div>
+          </div>
+          <div class="grid3">
+            <div class="field span2"><label>Endereço <span class="req">*</span></label><input placeholder="Rua / Avenida"></div>
+            <div class="field"><label>Número <span class="req">*</span></label><input placeholder="Nº"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Cidade <span class="req">*</span></label><input placeholder="Cidade"></div>
+            <div class="field"><label>Estado <span class="req">*</span></label>
+              <select>
+                <option value="" selected disabled>UF</option>
+                <option>AC</option><option>AL</option><option>AM</option><option>AP</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MG</option><option>MS</option><option>MT</option><option>PA</option><option>PB</option><option>PE</option><option>PI</option><option>PR</option><option>RJ</option><option>RN</option><option>RO</option><option>RR</option><option>RS</option><option>SC</option><option>SE</option><option>SP</option><option>TO</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="terms">
+            <input type="checkbox" id="agree">
+            <span>Li e estou de acordo com os <a href="#">Termos de Serviço</a> e a <a href="#">Política de Privacidade</a> da PagJus.</span>
+          </label>
+
+          <button class="paybtn" id="payBtn">
+            <span id="payLabel">Pagar R$ 392,55</span>
+            <svg class="paybtn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="footsecure"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Ambiente de pagamento 100% seguro</div>
+          <div class="transp-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Checkout transparente — pagamento concluído nesta página, sem redirecionamento.</div>
+          <div class="support">Precisa de ajuda? Fale com o suporte: <a href="mailto:suporte@pagjus.com.br">suporte@pagjus.com.br</a></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== Tela de resultado: SUCESSO ===== -->
+<div class="result" id="resultSucesso">
+  <div class="result__wrap">
+    <div class="result__top"><span class="wordmark"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span></div>
+    <div class="result__card">
+      <div class="result__ico ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="result__title">Pagamento aprovado!</div>
+      <p class="result__sub">Seu pagamento foi confirmado e o comprovante já está disponível.</p>
+      <div class="result__amount" id="okAmount">R$ 0,00</div>
+      <div class="result__amount-sub" id="okInstall">—</div>
+      <div class="result__box">
+        <div class="result__row"><span class="k">Situação</span><span class="v ok">Aprovado</span></div>
+        <div class="result__row"><span class="k">Guias</span><span class="v" id="okGuias">—</span></div>
+        <div class="result__row"><span class="k">Favorecido</span><span class="v" id="okFav">—</span></div>
+        <div class="result__row"><span class="k">Data do pagamento</span><span class="v mono" id="okData">—</span></div>
+        <div class="result__row"><span class="k">ID da transação</span><span class="v mono" id="okId">—</span></div>
+      </div>
+      <button class="rbtn primary" id="okPanel" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Voltar ao painel</button>
+      <button class="rbtn outline" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar comprovante</button>
+      <p class="result__foot">Enviamos os detalhes para o seu e-mail. Precisa de ajuda? <a href="#">Fale com o suporte</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Tela de resultado: ERRO ===== -->
+<div class="result" id="resultErro">
+  <div class="result__wrap">
+    <div class="result__top"><span class="wordmark"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span></div>
+    <div class="result__card">
+      <div class="result__ico err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      <div class="result__title">Não foi possível concluir</div>
+      <p class="result__sub">Seu pagamento não foi aprovado. Nenhum valor foi cobrado, verifique os dados e tente novamente.</p>
+      <div class="result__box" style="margin-top:24px">
+        <div class="result__row"><span class="k">Situação</span><span class="v err">Recusado pelo emissor</span></div>
+        <div class="result__row"><span class="k">Motivo</span><span class="v">Dados do cartão inválidos</span></div>
+        <div class="result__row"><span class="k">Guias</span><span class="v" id="errGuias">—</span></div>
+        <div class="result__row"><span class="k">Valor</span><span class="v mono" id="errValor">—</span></div>
+        <div class="result__row"><span class="k">ID da tentativa</span><span class="v mono" id="errId">—</span></div>
+      </div>
+      <button class="rbtn primary" id="errRetry" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Tentar novamente</button>
+      <button class="rbtn outline" id="errPanel" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Voltar ao painel</button>
+      <p class="result__foot">Se o problema persistir, <a href="#">fale com o suporte</a>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="brandstrip"></div>
+
+<script>
+  // ===== Formatação =====
+  const brl = v => 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const totalFmt = brl;
+
+  // ===== Elementos =====
+  const parcelas   = document.getElementById('parcelas');
+  const payLabel   = document.getElementById('payLabel');
+  const payBtnEl   = document.getElementById('payBtn');
+  const sumInstall = document.getElementById('sumInstall');
+  const sumTotal   = document.getElementById('sumTotal');
+  const sumTributo = document.getElementById('sumTributo');
+  const sumTaxa    = document.getElementById('sumTaxa');
+  const totalPagar = document.getElementById('totalPagar');
+  const selCount   = document.getElementById('selCount');
+
+  const FEE_RATE = 0.3085; // taxa de serviço ilustrativa (30,85%) — ajuste conforme a regra real
+  const PLANS = [1,3,6,10,12];
+  let TOTAL = 0;           // total a pagar = guias selecionadas + taxa
+
+  // Expandir / recolher cada guia
+  document.querySelectorAll('.bill').forEach(bill=>{
+    const chev = bill.querySelector('.bill-chev');
+    const main = bill.querySelector('.bill-main');
+    [chev, main].forEach(el=> el && el.addEventListener('click', ()=> bill.classList.toggle('collapsed')));
+  });
+
+  // Copiar linha digitável (por guia)
+  document.querySelectorAll('.digit-copy').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.stopPropagation();
+      const code = btn.parentElement.querySelector('code').textContent.replace(/\s+/g,'');
+      const lbl = btn.querySelector('span');
+      const done = ()=>{ lbl.textContent='Copiado!'; setTimeout(()=>lbl.textContent='Copiar',1600); };
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(code).then(done).catch(done); }
+      else { done(); }
+    });
+  });
+
+  // Botões sem backend (protótipo) — Ver/Baixar, Histórico, extrato
+  document.querySelectorAll('.doc-btn, .btn-hist, .saldo-link').forEach(b=> b.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); }));
+
+  // ===== Cálculo do total conforme guias selecionadas =====
+  const checks = [...document.querySelectorAll('.bill-check:not([disabled])')];
+  function selectedSum(){
+    let s=0, n=0;
+    document.querySelectorAll('.bill').forEach(bill=>{
+      const c = bill.querySelector('.bill-check');
+      if(!c || c.disabled) return;
+      if(c.checked){ s += parseFloat(bill.dataset.valor)||0; n++; bill.classList.add('selected'); }
+      else { bill.classList.remove('selected'); }
+    });
+    return {s,n};
+  }
+  function buildParcelas(total){
+    const cur = parcelas.value || '12';
+    parcelas.innerHTML = PLANS.map(k=>{
+      const per = total/k;
+      return `<option value="${k}"${String(k)===cur?' selected':''}>${k}x de ${brl(per)}${k===1?' sem juros':''}</option>`;
+    }).join('');
+  }
+  function refresh(){
+    const {s,n} = selectedSum();
+    const taxa = s * FEE_RATE;
+    TOTAL = s + taxa;
+    selCount.textContent = n;
+    totalPagar.textContent = brl(TOTAL);
+    sumTributo.textContent = brl(s);
+    sumTaxa.textContent = brl(taxa);
+    buildParcelas(TOTAL);
+    const k = parseInt(parcelas.value,10)||12;
+    sumInstall.innerHTML = k===1 ? '<span class="mult">1x</span> ' + brl(TOTAL) : '<span class="mult">'+k+'x</span> ' + brl(TOTAL/k);
+    sumTotal.textContent = 'Total ' + brl(TOTAL);
+    if(s<=0){ payLabel.textContent='Selecione uma guia'; payBtnEl.style.opacity='.55'; payBtnEl.style.pointerEvents='none'; }
+    else { payLabel.textContent='Pagar ' + brl(TOTAL); payBtnEl.style.opacity=''; payBtnEl.style.pointerEvents=''; }
+  }
+  checks.forEach(c=> c.addEventListener('change', refresh));
+  parcelas.addEventListener('change', ()=>{
+    const k = parseInt(parcelas.value,10)||12;
+    sumInstall.innerHTML = k===1 ? '<span class="mult">1x</span> ' + brl(TOTAL) : '<span class="mult">'+k+'x</span> ' + brl(TOTAL/k);
+  });
+
+  const onlyDigits = s => s.replace(/\D/g,'');
+  document.getElementById('cardNum').addEventListener('input', e=>{ e.target.value = onlyDigits(e.target.value).slice(0,16).replace(/(.{4})/g,'$1 ').trim(); });
+  document.getElementById('exp').addEventListener('input', e=>{ let v = onlyDigits(e.target.value).slice(0,4); if(v.length>2) v = v.slice(0,2)+'/'+v.slice(2); e.target.value = v; });
+  document.getElementById('cvv').addEventListener('input', e=>{ e.target.value = onlyDigits(e.target.value).slice(0,4); });
+  document.getElementById('cep').addEventListener('input', e=>{ let v = onlyDigits(e.target.value).slice(0,8); if(v.length>5) v = v.slice(0,5)+'-'+v.slice(5); e.target.value = v; });
+  document.getElementById('doc').addEventListener('input', e=>{
+    let v = onlyDigits(e.target.value).slice(0,14);
+    if(v.length<=11){ v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); }
+    else { v = v.replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2'); }
+    e.target.value = v;
+  });
+
+  // ===== Telas de resultado (transparente: sem trocar de plataforma) =====
+  const resSucesso = document.getElementById('resultSucesso');
+  const resErro    = document.getElementById('resultErro');
+  const pad = n => String(n).padStart(2,'0');
+  function agora(){ const d=new Date(); return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' · '+pad(d.getHours())+':'+pad(d.getMinutes()); }
+  function novoId(){ let s=''; for(let i=0;i<8;i++) s+= Math.floor(Math.random()*16).toString(16); return '#PA-'+s.toUpperCase(); }
+  function selInfo(){
+    let n=0, fav='—';
+    document.querySelectorAll('.bill').forEach(b=>{ const c=b.querySelector('.bill-check'); if(c&&!c.disabled&&c.checked){ n++; if(fav==='—'){ const p=b.querySelector('.prov'); if(p) fav=p.textContent.trim(); } } });
+    return {n, fav};
+  }
+  function showSucesso(){
+    const {n,fav}=selInfo();
+    const k=parseInt(parcelas.value,10)||1;
+    document.getElementById('okAmount').textContent = brl(TOTAL);
+    document.getElementById('okInstall').textContent = (k===1 ? 'À vista' : k+'x '+brl(TOTAL/k)) + ' no cartão de crédito';
+    document.getElementById('okGuias').textContent = n + (n===1?' guia':' guias');
+    document.getElementById('okFav').textContent = fav;
+    document.getElementById('okData').textContent = agora();
+    document.getElementById('okId').textContent = novoId();
+    resErro.classList.remove('is-open'); resSucesso.classList.add('is-open'); window.scrollTo(0,0);
+  }
+  function showErro(){
+    const {n}=selInfo();
+    document.getElementById('errGuias').textContent = n + (n===1?' guia':' guias');
+    document.getElementById('errValor').textContent = brl(TOTAL);
+    document.getElementById('errId').textContent = novoId();
+    resSucesso.classList.remove('is-open'); resErro.classList.add('is-open'); window.scrollTo(0,0);
+  }
+  function fecharResultados(){
+    resSucesso.classList.remove('is-open'); resErro.classList.remove('is-open');
+    payBtnEl.style.pointerEvents=''; payBtnEl.style.opacity='';
+    refresh();
+  }
+  payBtnEl.addEventListener('click', ()=>{
+    if(!document.getElementById('agree').checked){ alert('Para continuar, aceite os Termos de Serviço e a Política de Privacidade.'); return; }
+    payBtnEl.style.pointerEvents='none';
+    payLabel.textContent = 'Processando...';
+    setTimeout(()=>{ payLabel.textContent = 'Pagar ' + brl(TOTAL); showSucesso(); }, 1400);
+  });
+  document.getElementById('okPanel').addEventListener('click', fecharResultados);
+  document.getElementById('errRetry').addEventListener('click', fecharResultados);
+  document.getElementById('errPanel').addEventListener('click', fecharResultados);
+
+  refresh();
+
+  // Pré-visualização das telas de resultado via URL: ?tela=sucesso ou ?tela=erro
+  const tela = (new URLSearchParams(location.search).get('tela') || (location.hash||'').replace('#','')).toLowerCase();
+  if(tela==='sucesso') showSucesso();
+  else if(tela==='erro') showErro();
+</script>
+</body>
+</html>

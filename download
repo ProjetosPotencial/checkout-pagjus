@@ -1,0 +1,11 @@
+# SO / editores
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Node (caso adicione build no futuro)
+node_modules/
+dist/
+.env
