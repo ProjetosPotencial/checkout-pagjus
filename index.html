@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checkout · PagJus</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%230A0D16%22/%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2258%25%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2216%22%20font-weight%3D%22900%22%20fill%3D%22%23FF5500%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3EJ%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%23FF5500%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2734%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2744%27%20font-weight%3D%27900%27%20fill%3D%27%23ffffff%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3EP%3C%2Ftext%3E%3C%2Fsvg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -130,7 +130,7 @@
   .order-head .oh-label{font-size:13px;color:var(--muted);font-weight:500}
   .order-head .oh-value{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin-top:2px}
   .oh-main{flex:1;min-width:0}
-  .due-pill{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(207,0,30,.10);color:var(--red);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid rgba(207,0,30,.22)}
+  .due-pill{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px}
   .due-pill svg{opacity:.9}
 
   /* Detalhamento da guia — recolhível (lido do código de barras) */
@@ -414,8 +414,8 @@
 
       <!-- Título da página -->
       <div class="pagehead">
-        <h1>Pagamento de guia</h1>
-        <p>Pague guias e débitos judiciais de forma rápida e segura.</p>
+        <h1>Pagamento de guias</h1>
+        <p>Pague guias, tributos e taxas de forma rápida e segura.</p>
       </div>
 
       <div class="grid">
@@ -424,131 +424,70 @@
         <section class="col-left">
           <div class="card pad">
 
-            <!-- Total a pagar / Saldo -->
-            <div class="summary-cards">
-              <div class="scard total">
-                <div class="s-label">Total a pagar</div>
-                <div class="s-value" id="totalPagar">R$ 0,00</div>
-                <div class="s-hint"><span id="selCount">0</span> selecionado(s)</div>
-              </div>
-              <div class="scard saldo">
-                <div class="s-label">Saldo</div>
-                <div class="s-value">-R$ 66,89</div>
-                <div class="s-hint">você deve</div>
-              </div>
-            </div>
-
-            <button class="btn-hist" type="button" id="histBtn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>
-              Histórico e extrato
-            </button>
-
-            <!-- Pagamentos a fazer -->
-            <div class="sec-hd">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Pagamentos a fazer
-            </div>
+            <!-- ===== Resumo da operação (guias selecionadas no link de pagamento) ===== -->
 
             <!-- Guia 1 -->
-            <div class="bill selected" data-valor="300.00">
-              <div class="bill-head">
-                <input type="checkbox" class="bill-check" checked aria-label="Selecionar guia">
-                <div class="bill-main">
-                  <div class="bill-top">
-                    <div class="bill-title">Outro · Tribunal Regional do Trabalho</div>
-                    <div class="bill-value">R$ 300,00</div>
-                  </div>
-                  <span class="venc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg>Vencido em 16/09/2025</span>
+            <div class="order collapsed">
+              <div class="order-head">
+                <div class="oh-main">
+                  <div class="oh-label">Guia 1 — Outro</div>
+                  <div class="oh-value">R$&nbsp;300,00</div>
+                  <span class="due-pill">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+                    Vencimento: 16/09/2025
+                  </span>
                 </div>
-                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+                <div class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
-              <div class="bill-body">
-                <div class="fld-label">Linha digitável</div>
-                <div class="digit-box">
-                  <code>85840000003 5000028018 7640001052 4636237540 001831</code>
-                  <button class="digit-copy" type="button" aria-label="Copiar linha digitável">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    <span>Copiar</span>
-                  </button>
-                </div>
-                <div class="fld-label">Fornecedor</div>
-                <div class="prov">TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
-                <div class="fld-label">Itens</div>
-                <div class="itens-box"><span>1 item</span><span class="it-val">R$ 300,00</span></div>
-                <div class="fld-label">Documento</div>
-                <div class="doc-btns">
-                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver</button>
-                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar</button>
+              <div class="conta-detail">
+                <div class="ben-title">Outro — TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
+                <div class="ben-org">Tribunal Regional do Trabalho da 15ª Região</div>
+                <div class="ben-recv">Recebedor <span class="sep">|</span> CNPJ <span>03.773.700/0001-77</span></div>
+                <div class="digit-wrap">
+                  <div class="digit-label">Linha digitável</div>
+                  <div class="digit-box">
+                    <code>85840000003 5000028018 7640001052 4636237540 001831</code>
+                    <button class="digit-copy" type="button" aria-label="Copiar linha digitável"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Guia 2 -->
-            <div class="bill selected collapsed" data-valor="1200.00">
-              <div class="bill-head">
-                <input type="checkbox" class="bill-check" checked aria-label="Selecionar guia">
-                <div class="bill-main">
-                  <div class="bill-top">
-                    <div class="bill-title">GRU Judicial · Tribunal Regional do Trabalho</div>
-                    <div class="bill-value">R$ 1.200,00</div>
+            <div class="order collapsed">
+              <div class="order-head">
+                <div class="oh-main">
+                  <div class="oh-label">Guia 2 — GRU Judicial</div>
+                  <div class="oh-value">R$&nbsp;1.200,00</div>
+                  <span class="due-pill">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+                    Vencimento: 20/02/2026
+                  </span>
+                </div>
+                <div class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+              </div>
+              <div class="conta-detail">
+                <div class="ben-title">GRU Judicial — TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
+                <div class="ben-org">Tribunal Regional do Trabalho da 15ª Região</div>
+                <div class="ben-recv">Recebedor <span class="sep">|</span> CNPJ <span>03.773.700/0001-77</span></div>
+                <div class="digit-wrap">
+                  <div class="digit-label">Linha digitável</div>
+                  <div class="digit-box">
+                    <code>85853000012 2000028018 7640001052 4636237540 001831</code>
+                    <button class="digit-copy" type="button" aria-label="Copiar linha digitável"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button>
                   </div>
-                  <span class="venc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"/></svg>Vencido em 20/02/2026</span>
-                </div>
-                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-              </div>
-              <div class="bill-body">
-                <div class="fld-label">Linha digitável</div>
-                <div class="digit-box">
-                  <code>85853000012 2000028018 7640001052 4636237540 001831</code>
-                  <button class="digit-copy" type="button" aria-label="Copiar linha digitável">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    <span>Copiar</span>
-                  </button>
-                </div>
-                <div class="fld-label">Fornecedor</div>
-                <div class="prov">TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
-                <div class="fld-label">Itens</div>
-                <div class="itens-box"><span>1 item</span><span class="it-val">R$ 1.200,00</span></div>
-                <div class="fld-label">Documento</div>
-                <div class="doc-btns">
-                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver</button>
-                  <button class="doc-btn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar</button>
                 </div>
               </div>
             </div>
 
-            <!-- Saldo a quitar -->
-            <div class="sec-hd">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/></svg>
-              Saldo a quitar
-            </div>
-
-            <div class="bill saldo-item collapsed" data-valor="66.89">
-              <div class="bill-head">
-                <input type="checkbox" class="bill-check" aria-label="Saldo a quitar">
-                <div class="bill-main">
-                  <div class="bill-top">
-                    <div class="bill-title">Saldo a quitar</div>
-                    <div class="bill-value">R$ 66,89</div>
-                  </div>
-                  <span class="venc owe"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Você deve ao escritório</span>
-                </div>
-                <div class="bill-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-              </div>
-              <div class="bill-body">
-                <div class="saldo-note">O escritório ainda não cadastrou uma chave PIX. Combine o pagamento diretamente com ele.</div>
-                <button class="saldo-link" type="button"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ver no extrato o que estou pagando</button>
-              </div>
-            </div>
-
-            <!-- Resumo do pagamento (cartão) -->
-            <div class="resumo" style="border-top:1px solid var(--line);margin-top:6px">
-              <div class="sum-title">Resumo do pagamento</div>
-              <div class="row"><span class="k">Valor selecionado</span><span class="v" id="sumTributo">R$ 1.500,00</span></div>
+            <!-- Resumo do pedido -->
+            <div class="resumo" style="border-top:1px solid var(--line);margin-top:14px">
+              <div class="sum-title">Resumo do pedido</div>
+              <div class="row"><span class="k">Valor dos tributos</span><span class="v" id="sumTributo">R$ 1.500,00</span></div>
               <div class="row"><span class="k">Taxa de serviço</span><span class="v fee" id="sumTaxa">R$ 462,75</span></div>
               <div class="row total">
                 <span class="k">Valor total a pagar</span>
-                <span class="tt"><div class="big" id="sumInstall">12x R$ 163,56</div><div class="small" id="sumTotal">Total R$ 1.962,75</div></span>
+                <span class="tt"><div class="big" id="sumInstall"><span class="mult">12x</span> R$ 163,56</div><div class="small" id="sumTotal">Total R$ 1.962,75</div></span>
               </div>
             </div>
 
@@ -559,10 +498,9 @@
 
             <div class="poweredby">
               <span>Processado por</span>
-              <span class="wordmark pb-logo"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span>
-              <span class="pb-sep">·</span>
-              <!-- LOGO POTENCIAL TECNOLOGIA — imagem oficial do site (Framer). Para versão 100% offline/embutida, troque o src por um data:URI da imagem enviada. -->
               <img class="pot-img" id="potLogo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAAA/CAYAAACLiqatAAApoUlEQVR42u2deZhcRbn/P29V98xkX6b7zASIcCFhCbJIEASBCKLIRRHEiKwioOKGArJjIKxeEVyu4noRvPxEiSwisggKiIiKAUEYkD0QSaZ7ZkJISDLTp+r9/XHq9Jzu6ckkIShwu56nn5npOadOnTr11vd9v+9yLP/6JszG0oXyyZl5Nh8/h20Kb+eR3vsAmEWOBSjN1mxvwib/0qvNxjIPB8AhW+4CfAVr9sArVPzNeD2da594eMixzdZsTYFbi3Y2BoC5eD648UTGjDkD0RMwkqPfe1QhbwwDbgW481kul3LrU/1B6Dw0Ea/ZmgK3hqg22zJvXoJUh2/xAbz9GnnZnAEHTj1gUMCrQ7BYgYq7n1i+xI1P/r6Jds3WFLi1RbWDt55KnvMwfAwPxM6hGFQFBVTDB8Wrx4oldh7VSxF/Ab9c8FIT7ZqtKXDDkyKmikiHbX0swnnkpJN+54NgmTpBq/3pvQcEK0LFP4bGp/HrF25sol2zNQVuOFLkyM23hZYLMPJ+nAfnHCoWnxWwRr/7jOCpw2BRBadXsnzF6dzTsyiMWwDffITN9kZqdj2iWiJsszcaxQ5vORkxV2LNW6k4h1NBxAyLaI2ETQHU4PB4BSvbY3IfZZNxPTy77CFAmy6EZvu/J3CJT83ThXLElrNoGf3/aDFH4rQl2GoWkEGhypyb/a6hAAKooAixOoQJWDmQTcbNZOqYv/H75aWqvXh3U/Ca7c2sUmZJkSO2bEfsHEQ+hxFDJZAiIIkKmbXPdFDYPIqqT8gTTRDNZ4VOGfwb8KqoKlYMzi3BcS4s+jZ3EzdJlWZ7swqcMHu2qVL9R771QIx8lZxMo9+BxyNqqoLlg9BQFZrkd48HNRgBH1TJinOQspd1wpZFvtSFYIABdw9OTuSPi//aJFWa7c0lcGdjmBuIio9vsymq52PkEBSIXYyKDSpgVjjqES6h/nPGJmSKvwy4A69zyMv2DHhwPlFFdTUES4J2wYXgV+H1Yl7iq3SVlzfRrtne6DacMHu25bKuhK4/+q3HofJT8nZnKl7xqrBGwpYgWN4aKu4RvB7Njc98g38seZzNR/0v3lZQ3RFr2oi9q9pvQ+y86mZhQp8tWJlFTv+TDdqe5faVT2Xsy6bQNdsbCOGyKtrHZmyPtV/F2vcQu0EkgqHso69DNQ2oFrsY1UtZueQCbu17mdnh/PQa79twW7y9BMvexJpcA2yihg7HcKricRhyiQrrv4dWzuL+Zb0QbM2mC6HZXucCN+jA/uSU0QwUTkX4Ejk7moF4kBQZTu1L7TaXDdnyf6LivsSvnrm3gb2VdZgLe294LMI5iGxARYPDXE1iC9arl1UETAiYxGH+LKKncf+Sa5q2XbO9vlXK2bMtXV0J1X/UtnvB2J/RYj+K0zyxC4iTClujSBEC6gRU8345Ts9hwfhPcFfXc0HVgy48Z2N4F8Ldmb/vBp5ZNp+p469BNEJkOwTBaYxq4vQeJF+y107+59RhZDIis+ls3ZLOtr/y21VLqmpo07ZrttcFwmWp/tnbFxnnzwP5JBZJqH4xQ+y0Rsim3iFiMQKxuwXnTuH6Zx6pQxrhbKRKwtSjUPb3PaP9UXsBhrdS8cEWVFsrbAFRNWVHSahPK4bYL8b78/jby5dl+m6SKs32bxO4Wqr/6O0Ow3AuObMp/bHiUQQzbJQIpPR/ovrljCF2i0HPZt6TPxiyyLPC9MHN343xB+DsRdz4jxdrhD6rZu40eTyjWk7F+ZMwtFJRl6iYSF10Sj3B4jBqEQHnbwf5Eg++9HAG4ZtqZrP9CwWunuo35qtYOQiv4HyMkmu8kDML3Ct4jTGSA8D5n+EGTuO65xbUIdng74dNG88KTgFOJGdGMRA/jbqzuHHBz1YroLt17Iz6ixHZnThFO+yQMZJFvYTGwYrF+eWoXMjAS5fQxcB6QLuRiKcsabOm1zCZfj2DsaNr289rS6hlZrnBuSPFusoa9NNoTlJ9RjJ/r8/rDHeuvop509p/zsYyfpvjEXMmOdNejepPF0sjZKPKQHo8Qt4IA+5p0DOZ98TPV6siHjh9v5BB8LZERfSJsCZCfjVqzubXzzxZVXPr0Q4suxSPw/u5GGkn1sHx1gibB5XsbSfB0EbA+b/gOZWHlt71LyRVZIQHt6ZB2eYNwrquj3EahgYFruu8vQ4Q7pjtdkL0K+Rze1Jx4L0LDmxWr6oFql/E4hTUfw/1c5j3VLlGLUwEJpmw2dM3xHEWIschQMU70MQuTNRRISdCJV6M17nc8sL3MwiX7OxZRN65MB3V8xE+gicZe5LQKoP2nAzdbTSgnVcH/lLyL5/PX3h5DR9ujfAUi8VTjDHvVdVKBs3S5oCnVfWmcrl82whCV12cHR0d/+G931dVdzLGTFHVV4DHvPe39/b23h3Or1/MBvCFQmFfY8zpIjKgico9/A2IeFVt8d5f1dPT8wMgB8SdnZ0zvPdfz+zOQ1Ai9N07MDDw6aVLl76UqueFQuEEY8z+wA9KpdLVaZ/Ze4+iaFPg2ylpp6pirf3i4sWLu+ruq/p7oVCYCewjItsCk4Fe4EHgtnK5/FDd3AqghUJhujHm2zUPxLnje3t7/7Ga55B+ny8Wi98RkWne+6/19PTcPIIJYgBfLBY/LyIHqOpKY0yb9/7P5XL5zLTfHHAPOdtCf0r11wkbdT+T7xP/W85YBtwjqD+Ba568o4oUcwMpMvg7fHj6kShzyZlNqPgkJhK11b4JlP+Ad4jpxOh3ee/UA1B3GvNe/FuDvg3zep4EDmbHydeg+lWsbJoIf8gkb6wVCYLFqU/cFfZk4gnv521yKg++9Ku1RSsR2UFE3j3Cwv5cFEW3qepR5XJ5cQNhEcBPmTJltHPuHO/9J4wxEzPnAxwoImcUi8W74zg+fcmSJffVLQABMMZsaIzZXVXT81YPH8bgvf8LwIwZM0xXVxfOuUnGmPeOcE+oal9bW1vL0qVLq9cXkZnW2nc553YvFout5XL5iozQSRDW8SKybzo+EcE5N6kBg+6KxeJmIvJV4AMikq875qOqem6xWLzOOXdKX1/fwqyqqaoTReS9dTvFhDXY+Fx7e/t/GmM+Ee5zDHDbGqAswLbGmL2894gIUvcQDNDCQIbqZzj1MWCDqsMaC6yioufh7S5c8+QdwYEtzMMFhFPm4Thwy7fy4ek3YMyViGySXEsF1NQKcoqkWJxXKuqxZh8w97DXBmeybceYJP2nxlFuAMNf+67FxDsRcyloBYtBcaudIAljjDUG2QojN7L9+F+w/dhinc00Uluhqk5VB8JP6j6xqjpjzD4icsu4cePa61Aj3fU7nHO3GWNOFpGJquq89wPpJyCoGmNm5fP5O6MoOjwIm6kToPScleG8dFzZTyV7jIisrOsjTsed+dno3hvt9it9omkgIpcXCoVjgrDlMkLpVHVlZjyxMSauX/TFYnFX4F4R+RCQV9W4bk5ioMVae4i19o+dnZ3FDPojIrGqVrL3XXed4WxSMcYcD3jv/YAxZqeOjo59wya52uiszH2tVFUHvFIrcEI9wZA9OyN8PkGWJFrkXpzuyc8em8O8ruVDbLW5eGbOzPPhLU4i5+8hZz9I7D1xQBVthJo1gpcIZJJ1MJacPZ92ewezpuwWrqNB8DzgmY3l/mW9PNB3Ehq/m5j7yIlFkCB4q0cqkcQWNdKb0i9raWPYzM+lwOPAk8DTYaHZsLC3b2trO6PO6Jdp06a1qupPjTG7ee8r6YM1xrSkHyAP+PAQW4HLOzo69gzHmgzytIVzRhljWkSkJYyr+hGRfPYYYGzdopHM8TlAVLVLVeer6t9U9QFVfUhV/7Zq1arKMPPhg/D+sFgsHhWEzmQ2mZoxhWumyKbFYnEz4DpjTEcQLA/k6uYkF4QCEfnm4sWLX6LWzzrkOiNspDao5XsYY94VxmRILnLSGtjg2fu3mXVRbTmc76ElV6A/1sDmmRrB85qwQDlrqbiXqPjzeGLMfzN/fqVqW6XIMw/HPBwHTd8ds/wirLwTB4MIOkyiaU0mALVo51Vx6rHyDlTvYFbHd1hhL2Tei4NhW/Oyaubye5jGnoyfcDzKWeTM+FCsiJqbVzyCISeWmIdR/SIPLb1zXY3hgGI559x1Y8aM+cyyZctaRERzudwsVf0JMFFVvYgcMnbs2IuWL1/eE4So8vLLL38mqCE1SKCqv1HVR0VkEvA+EenUBGqciOS9998uFos7l8vlVzLnPOicu0RVKyLigKKIHB36Tcd6paouVFUbBPJ2gK6uLt9ot1fVfhE5pFQqPbbRRhvl2traPMBTTz3lMvaZDsfWicjlURS1lkql7wMmI1yNWjqGb2SEzYqIeO9XquqdwEIRmQq8R0Ry3vvPl8vlb2cEwqzrYwzjPTFFWSAXntus9vb2Wb29vXe9GndSDm/eTr87DyuHA0LFxSA2pMg4jFgMlkp8M+pP4uonHs+wh6n6KMzFceg2k6gMnIbwBYy0UvGedLdsmNXdKP5yiI9PQC0V9UAr1pxIa/xeduk4nfu6b6phGFMG8yn6YenFbD/213i+gjEfCE55l/gTcVjJ4bWC028ykJ9LV3l5ZmdeZ9pdRNyCBQtWAavCVzcVi8VvGWPO1sS27Bw1atTmQeDiYrE4VlWPE5HsNZcCHy+VStenX0yePHnDXC73fRHZT1UlCPiMOI73B36aHrd48eL7gfvTvydOnLhxS0vLkVmBE5GLS6XSo2tI8QNoHMe9QGXhwoWVdWFlReR7URRJqVT6nqoaGd7AdIVCYaaI7BvmywRhe0RVP9bT0/NAemAURXur6iblcvlH64ERNYBvb2/fUUT+M2xsaZ8qIiaomXe9mvWR48qHngOO4KhtfoFwAS1262peW4u1VNwiBvwcrn78RzX+sblBrUtJkYM3/yBu4ELyZgYVHxjIYQKbaz7q8Whi0yHDpuMklL8yoB4jb0X1V7yjeDnenc28GmM5i3ZdwP5sP/FIjJ5LzmwcyjXk8DofOJEHX/r9+nSCq2qqhqXqRD/wbBYxRGRM+rf3fkdr7fRgI0lYXCeUy+XrM/aC9PX1/bO9vf0Qa+18EZmesqLGmA8GgcuqUSZVrfL5/MR6Ncp7PzGDpH41vqzU5spba88uFAo9xphcUG3zInJlqVR6eAREkXC8ish3oyhabq39vXNudUTOfiJiU3Tz3r8CHN7T0/NQGLcCvlQq3bG+3SQi8hkRyQXV3YqIaGgisl97e/vbe3t771/X9WI4O3yu+Psv6R3Yhf7KRUA/OTEM+B9T6d85CFtyXEKKSJUUOXSrjfnollch5gZEZlDxLmEgs6iW2mxZF0NwKxgx2Gpspsuok43suwQtY+/xqliORuSPvH3yUZlFM5RU+dtLPyGOdyL23wOW4PxFtIzdPQibzQjq+mgrg5rVH363wBGZhVERkUWZxTUj7PZORKz3foH3/hepLRPGFQP53t7eZar68zq6fsvUvssgikvPM8a4Rigc+kyP8yOoWXljzCestaeLyMkicqq19kTv/dZr6CSXoJoqcEUcxycCK1azac0IP32Ym98H6j+XGbfW24uv1tfX3t6+pYgcnEG3JYHBTZ9Pi7X2c+vgQM8gXOrTSgq2LgPO4JDNb8bmO/h/j15bo7LNraH6hUO2PAbVc7BmQwZcsAG1ASmidX68NGPbCAPuN3i9FdEvYc0GVDR1GZiGNU5StPMKDofIVAw/Zuak90PlLOYvf3zIrjcby7xXSsCnmTnpIh546flEa1t/oV0iYoIAbV8sFj+tqi3GGKOqHxCRPVU1DgL1YKFQeKK7uzu99rg622Vxb2/viipS1y58IyIL69BnTEdHR0t3d3eF17BpLU3pAxoPrMGpLiMUElDjC3URI/VtXN3cLqZx0Pn6dHSriHzWGDM6MJMtzrnfWmvnqurfArGjqnrQlClTLlq0aNE/1gVZB1WBJI4yEairn/gDVz16bRX9Bun4gGrTt+eQLX+NMT8E2TCURpBaIcnaZDoYlaLqyYnFay8VfwLSsj+3v/B11OxG7K9AEIwYPC6gYH3u22BdFNTi1eNUsXIQmvsD2437IrMS9qqKXvOqi1eYv+T5TJjQ+owsMWFN7mqMucxa+w0RudQYs2fGByXAxV1dXQMzZsywYTEtzZ4vIlMnTJgwri68K6uaTa/bYZd1d3f3v8YBEhpo7hWquhJYqaoDIuJXc4IPZtovgSuNMSaDTLo6VDTGvFTX18YMDXHLMpCvGt0mT568kTHmiKA65oI6+63u7u5HVPWaoFpWjDFjnHPHryvCmSHqQ+pHS+n9uSG6Yx6O988czSFbnYnm7iZn96XiPbH3NeUQBvXBwU8S2+EwGIwYBtx1OD+LWxd8g1uf6mcWOW5//lnuWPhxXHwQzndhqxnkbrCfmty39Gdi+1XUgbRj7ddZMu5Wth719swDtpkBGV7beEQffFfpx4tILqDb3HK5/AvAdHV1ubCYHknthaC2bJDL5Y6tujwG7bFKe3v7BiJycJaQUNVHM5T7a3FPoqr9qjrbez8zjuOd4zjeGdipUqn8bjX+OE39UqVS6Wjn3PUikmuA3EMn0PuHU60hCMCuhUJhj/qIlYxK/Grqqwqg1tpPicgEIBYR473vUtWVnZ2dOwL3Aj4IogKHdXR0bLKGjGjWpjaND56bofpBmYvn8Bl7MX7FXeTN+QjjA9VvIJNFQMPcuISWzInF6bM4dwS3PH8Qt73waNVZfnd1wRjuXHwdZtkeVPzXUO3HkIRgedVqUmuj64gmLoTYe0Tejdg72WrMOcxgbMZB/K+ItzNBwHJhgamqPgAcUi6Xz6E24FZaW1vnq+rjKWmnqt5ae34URcdNmzatNRW8KIq2NcZcJyIbaTWSBgkIAq9NFe3q7lmpVB7v7e39x5IlSx7p6+vrKpVKf1+yZMnSNVC1WwFfLpcPVtVrw5zEI0S/3KSqA+nmKCJtInJVsVh8X2ZjyUVRdGixWDy3zq+5tsLmp0yZUhCRY4Mw2aBpbGmtvdd7fx/wtYxPzovIeOfcp0ZC6vA8U7+qA3yu4VGDsZCOwzeN0NY5qH4Ka3JUnMNjBlGtQRiYAt6HmEUsDk/FfxfV87j5+cUMZg24Ifr4bCzzlvXCspPZbcoN4L6CYTfiNKQsYyPWq5oaaqAkGQRjyMnZuDH7s1V8Mo/1/3Z9spHD+OGsqt6iql8PiyRW1YWlUqkrI/RZgbcLFy5cGUXRt4Dvp85doFVEvrt06dLji8Xiw0CkqrsaY1rDovDB//TXcrl842ugHg9p+Xx+wpQpU0YPDAzYXC7nvfeSy+X8okWLVq4OWcPmIIHuP7Snp+enxpiDgs+xkTqY6+7ufjSKop+LyBFBS1BjzFRVvaVYLD6sqotEZCNga2MMxWJxXLlcPmEdNh4DOOfcx4KPM31GcdgYajaNjOqvInJ0sVj8Zrlc7m6EcgGdEZGdi8ViyjhrbojEzw7+NYBDtvwoyDnk7RYMOKi4oD4OQ9IMCluiIuXEMuAewOtZ3LLgljoCRqvC3VW1s+qc2IvuZdq0vSku+SIqX8JIoZoZoMFBTyb0zFcF31ZrXgpvw9vb2LztO/Sbi1iwYjGvTXR5OiHPlUql24eJYnANjH5TKpX+p1gsvs9ae2BYiEZVMcZsBWwVFi5hQaQ2xnJjzOcCG/qaqZPpghOReXEcrzLGGO+9AtY5173RRhsduHDhwr4RFroCtqurawA4PIoiEZEPBTup0aYvzrnTrLU7i8jmITzLBjfItsC2qWEZwsK+WCwWRxtjTuzu7l6xhkKXho+NVdVPBQ1DAhmUG+b5peSRN8ZEzrljgfOHUSvTMXQaYw4YasNl4x8PnrYZh824mry9GjFbhMDmQX21MbokhV29T8oqqL5CxZ/H8ldmccuCW6oO8toaJraqvtaOZ9CWfOqpfu7r/S9iuyexuwHBhGTYQKqQ1LX0WZtRCXk5SZAyajFyPHl/N//RctAQF8KrtNkytoRT1XzotyXji5PV2DkKeOfcUd77m4wxuZTxzMQ8DgQ1zAZh61PV2d3d3X9eA6Ysa+u4YCfqCGpgjWsh9LGZiGwtIluJyAwR2UJVt4jj2K5uPjJjS9XgVaVS6aN16mWcGZMHpLe390VjzIHe+y5jTD4VEFXNxpZ6IB+EZTdVHVu32Ifce2ZjSjepDxtjpnnv+4M8vaCqZ9V95njvT1fVK9NnGVjnYyZPnjy+zo6sv/+a+M9cDarNxtI649OInIGVKQyElyUmkSe1BV2po+p9yKxGhIq/A+UMbnr2/iqqZdXHbGTIrM4dMTKdOxddTRoXmabi1OTBdT8CHMjbJn8co3MwbJI8TvVVtGuYt6cGRUN2wOYY8ws2abkKPzCH56sO6VfjOB0jIlZERocHPzojXG4NkVH6+vpeBg6IouiLwOdFZONgD2bVs1Wq+ivn3Jze3t7H12Tc3vucMWZ03Xf5Ec7JBwf3SK2tQZhW/XyMrUd0oFIqlQ4vFovOWvsRVcX7GvPGA2bx4sVdHR0de3rvzwSOFJGJYdPJjrXXe//DOI6/EmzKquaiqrm6DAObuU5lwoQJE4FzJAkjaQ1ZC98plUr/Ncz92iiKdjPGbBY0kE2AzwIXpZkWIjJGRGrY0+x4c1U0OWT6TuTyF5Kz7yZOI0XUBjK6lnys9aklBRjyYqn4RXi9kLZnv5uJr/QNK3O9p2MMA+Z4hFMRmcAeHR+Cyhzm9T1WJwSacWIrD/b9mG0m307Oz8HrsYganA7mwTWqYZl8b4NwCobDIb8XU/VcXoh/kEG7tWEvNTzw24ITd4X3fjRw9zo4RlPj25VKpUsmTJhweUtLy96qukOIo+wXkWeA35VKpb+voS2qJAZKr4h8N6hk6e6/aJgxpn8v8t7/cDX3oEBORJZUKpVVdT6x2wMiv+K9Hy0if6rru4p0xWLxiFKp9LSIdGSCAWqO6+7uLgFf6OzsvDSO4/eIyAxgDLAM+Ltz7o6+vr5/1rGXAMRxXDbG/KBOVS2l18nlcp2q+jvn3EDY3PqttZdnonCyq94AFeAk7/2BwCuq2pqSKV1dXXFYD78LUTIrG9p2zN50Am2jTkA4BWtGMeB8iNaX6m03rs6l+ECKeAXnrmHAnsGtTz1dVVGHKxC0x4Z7ktMLMfKOUCbBY8VQcb2oP49VPZcxn0rD8gfZfrYe934M5yOyHc6nwt+49orP2nrqkEC+OL0JiU/jBR5d32FC62gzmREE6c3yqi5hzRN9R7rfVx0Du57HvJoOjtj6QfJmeyohBUcz6TM6TB0Tr0mkfVJr8h8Qz+GG57L1Hxvf/F5RB5o/C+E4hFyItzTVQOkUUSv+TnBf5k9L7h1xYc6cNIGV8SngT0JoxakmiJZ9l0HD+0kjYwyOPtR/lUX+koyTel3qj2Tpm/UheI2QZV36bmRn6Tpcf03Gszbzkb3OSGMyDF8vxK/FfdRfZ23nZqT7M6sjbSw7dHwvicRPmT9qmb/aj2YiRRxOv8sqPsZNz9xPEmspXNbg5s/GYDc6BmOuwsp78GqqGdf4MDg1SSoOHiOb4jmMKW0RU3L3s2hgJY2LwVgWrVpJeeB3tOdvAd0QZPNApkitsA2ZRgluBIfoGJC9GSv7Mto8yyv6DGtXRKf+s75Yz/XV97r0oWv4ebXzsaZj0nWck7Ud76t93qudr1xqXlbtHxqUKq+SIlisscTuL4iexvVP31lH9TfeZboQxHeiMrka4pUWcW2EPolC1YrKJtCWh+WrpZsBR8uKx1nV9vRgXachZSEY5v6kaleobIjoZJqt2V6jZnD+WfImjdb3DZzKiQM7LxbvlzEQn8GyZXtx3dN3Dkv110PuPBy/ffF8vO5I7Ocl5Q0kQ+0rONIy5Rb1TxDrbOb37c/8nuEMfFulYKeP+hD9ox/EmuMDCsuwJf0GhU1DELUJSsF/I247uv0166BSWkbOLJZhjludGpjNJJdhVKb6rGIzgjpY369ZjTo2Uob02vaZPd6swfFr09cbolm2njwPTyvwdnLG4LzDB3XLq8OKwYjg/G2oHMoNT/2CZ15JCI2s+pi+hbQr49DOvpX0bAxXLOthwfJ5TB3zOF63w0oBr4IjDiFcmry+atXR/PXlv1Bbe7Ded+jZrG0qHflvYuQihPakZF9dADUNCyEl1cIEg9OH8HIk3e47LGfFOjiR10bNWdPjsnlqI6k69cHAa9vv6sKT1pTUaNTncPM43PHrqm6OGAz9emOKknbwFu/CyPkY805iD049eTEM+EV45tD3xBXDvGl0kOrfdYtxjFuxFz0v3NyQZcyWzNuts4h3p6L6OYy04nQ+FX868/tuH8JGNmLwthp9DCpnY3QqDg3vMjDD1s/MMquiFs8K1F9Cv36NvrUukVdlM6MoOkxE9vXeLxeROPjhRETO7e7ufjZVedvb27cwxpwQnL25UN7g5f7+/jNDmbkaraBYLH5IRA5T1YnAvQMDA5cvXbr0uSxr19HRsRNwTBzHl4bSb0RRdBLQWiqVLqzbrNKyfu8DjgKKwH3e+8t6e3tfpLY8gZ88efKMfD7/Be/9ZSEXrRF7KyR5ZHsZY44BpojI/ZVK5TtLlix5vtH1AYrF4mzgUJI0nD+r6pU9PT1P1B2fi6LofO/9Ez09PZc36mvjjTduW7FixbeAJ8vl8sXrg0V87VXKNLH05/+4i5aVe1OJT8XrEgyGiruKWHbl+id+xN3E1ayB9KayKTvvm7IbY1fcgsgNTNzwV8zq3LGu4E9avjz5+w+Ly/yx/CUq/v1U9Gy83ysIW72aSkYYHFuP3YoZo6/DyI8QphLjggppaoSMhqX9JAQ5/x5xe7FI5wRhWxdaORWQad77XUTkUBH5rKruDezuvR+fRWRVnWqt/RSwn6ruAOykqm8bNWpUvn4BF4vFC6y11wLbAaOttV9uaWm5qJ55E5GtjDGfNMb8b3t7+ziSyP4jgaMbPGctFounG2NuAXYBRhljzrTW3lsoFKbXM2zGmE1E5JPA5kM250yfhULh+Fwu91sReVeIOTwln8//uaOj463URtNLELZLrLXXAFuLyDhjzBnAF+pcAJAEEX9ORN7f4PoGkOXLl+9jrf2EiJwfovd546iXszP2xEemb8eHNj+g7n+1N5wGOO/3lknsM/Vr7DO1n/e9Rdl7I8c+U5W9NlzOnhtcwK7t44axLYZStrOH2DRStXNmkWPGmBOZMaaHrccqW452bDHasfkoZfooZbM2ZdM2ZdNW5T9alU1alI3zylvyjql5x9ScsoHtZYr5IkmGNGtho4xIuReLxVOiKIqjKOqoe/AWoFAo7NHR0REHhBlu86NQKOzQ0dGhURSlYUREUfSOzIKqzkkURYdFUVTp7OzUKIquCN/dE0XR/AbHbhP6vWbWrFm58N0uHR0dvlAoXFtnjxJF0Xs6OjriKIo+2IA+N5AUrI2iqBJF0a833njjtjD+t0VRtKJYLN5eP4ZJkybt1tnZqcVi8ftpRx0dHZvMmDGjpYHAtURRtDCKop80ECQT5vzOKIoei6JoaRRFXxmG5n/dIVzS5mWKt17z5ENc98QNpO8eGIpqnrl49t34ADz3kLMnobQkby3FBP/aGKw5g3z+D+wR7U+2pF3Wf5Hm3g1FtcESA1uO24WeMb/DyCVAe3gRpKlJeCVDimRf5EE4znEd3u3GIv8NkoiBbELkq1bLVTVHEtDb8IGrqgnRHldEUfR4FEULQ2pJveG/e6iInFY+bimVSn/q7u5+rt6uCnGbOOd+ICIfi6LoUGCZqrbUj897v1OIV/z63XffHQe18z7v/S0isgfQxmCSZ7ZUnsl8pA5tdg4ZEt9asGDBqo022mhUT0/Pg6p6I7BbiDOsopy1dlbID/wvwBaLxauAr/f09Pygvb19gwa2mG1QPTqtML2DMWaWiBylqt9Q1U8ElHe8ju253BADNA0aTiP459YsyOS7fd4yBSPnIXo0KpLJjbOD0fqqOO8xZlscv+Sd0Y+hcg7zqrq9VAV36AJOgn2nTR5PW//JqD8RMaNxoQrYkPd/D/mZxIAKFudfwOuXedFfWcdurs9IDRnhb0REQxXfP4pIF0l40l8zQpSqcisBEwr9KLC6MgZORHLGmAudc2NE5MckJcCfH7KzGrMKEO99WuG4P4xrnKr2M0x0Syij0HC+VHVVyISeDLBw4cI0zGu8iAy0trbG9WMIyZ3jwtiXqurbg9p60XBz12hujTHHhvs5BtjEWjtZVfcDfsbI0TqvA4TLttoI/tpFtN8mnyTHA1g5Jo2FDoImdUHDgwV/FCVnPg65P/KO9k9RG60vdSpl8r+tR7+XtoG7MeYskNEJqoXXUzGssGmVgQRD7P8H794ZhE3WI6oNWXuZCHtW42B1qnpNd3f33IGBgXNWrVr1h/oNQERu996vsNZ+vbOzc8aECRMmFovF00IF4xq1K72mcy4PHAc8Z4yZQq3j0gPEcXy3936pMebrhUJhhwkTJkwsFArHh7Lo/5tB/ezYnXOus729fYNCoTA9oy5rQKw/eO9LxpiLJk+evNOkSZPGFwqFY621+wJXLVq0aEV28YvIrarqROTbhUJheqlU+mxaFGmYDAZfV8bBAK6zs7Ooqgep6hPAdiIyynvfa4z5fPae3zgCt/rWj7KqWiG5UZGf2kpdBu/TFzpuiDHfY6f2m9l5wszq4s+qlDNGd7LNuG8h9mZEticO2d7VknsMJ2yJOpSQIo/h/EH80x3Li7yQUU9fswfhvW8NQasyjEqZJ6mmfHWxWHwll8staW1tfaajo2Nq9nl0d3c/670/GpjuvX+0tbX1BWvtRcaYmY36DJHpY8rl8vI4jo8IFZ7b6wTO9PX1LXTOHQEUrLXzQ7/fdM5dr6r1jGa1b2PMj4wxz1hrnwB+khE4s2jRoh7gcBFpy+fzf87n8y9Ya3/ovb8ll8vNoTa73XR3dz/qvf88sJMx5h9RFL1sjPmyqt5cqVTKDVjGcYH1rVePP2OMieI4PqBcLu9cKpV2B84wxuza3t7+bl5dMdh/kVtgbdp7N5qM8GWU4xBpq4uJbFDo1adB0B6vYMTg/CsoF6P6DeaHVP1txs5G5CJENiP2qWqYycFrFAVTTTS1eB3A+W+Du4CF9FEbp/dazqFOmjRp63w+v7219vqws9f8P6DD3qk9F3Z1p6o3lsvl5dS9+SWQJHsBo1X1r6VS6U91z0zDW3Z2c879sq+vb1lgDfcAxvX09Py60TiLxWIn8F5jzATg793d3XfV0fbpm2emGGP2qhPAhZlakNVzOjs7i977fURkkqo+ljmmXoDSMUwLrGZbHMeP9vb23tngeFMsFg8AFpfL5T9m77tYLO6jqvmenp6b0u+nTJkyyjn3Ie/9oz09PQ++Xl0Eay9wWf/Ye6a8EzUXIbI7XgmkiW2QmFofuZ8cZ4CKPgT+PLzuDxyZRJ1oRoAZGvWvNQ7sJOA55s84dxr/dHdlbLU36ttNh/V5rYnwr2W/vMrFubZ9rs8xvO79busH4bJvMp1JngkbHI9yCkaipAxDCIROy5r7hq8qVrwqIuE4BUfyXcOalEPCshIHtuNllEvwAxezsFp49d/x/u6RSu8NF4HvRugvW6FquD6z92vXQ7/DjXd1FZpNnQq5JhH3Ix0/nCnQaK4lY4P6N5vAJS2b8zarOA1yF4B+JHmMgeTw9Xae1iNWYB5Vh+ayNRS2DKr536CczvOVB0bYPZut2d4EApf2MfgqYNitczbqz8WwJXFVoMyw7wzwqxHG6jvESfsBgyHWbkTO59n+y1i3bO1ma7Z/S1s/XvmuDCv0/PJH2dBejTc5lB0w5EMVZal9WUcjRpNGMZAaEl4TJtPrNcRyOM/330rjV+82W7O9qRFueFLl7ZN2CazjLFwgS9LaGt4PLd/AkBy8BB0FcP5ZnJ7BgsrPMptFE9Wa7f8gwg1FuyRE7PZVzzNh5U+xo8qo7oBhXCJEXhvadpCWu9NQsdmGIunfJ+4/iuf9fXVEQbM12/9xhBvKJiWCMXP8Zjg5H/holfpP3wtAA5cBQKyPgj+ZZwZuyWwQrvnYmq2JcI3bINrd0d/L4v5rKbQ9DLoNRjqS8gahdF31fXFYvPbj9Gsw+mieeeURBkPAmqjWbE2EWwu0SyiS7ccWqciJeD0Roy3hHdxJMdeYe/B6Os+sureJas3WbOuDVEnb9FE7scXo37DVaGXzth6mt53MzPWaq9ZszdZsZBNLwbLFqOPZrG2Xf6Gq22zN9m9p/x+LTc0T6X1zvAAAAABJRU5ErkJggg==" alt="Potencial Tecnologia">
+              <span class="pb-sep">·</span>
+              <span class="wordmark pb-logo"><span class="w-pag">Pag</span><span class="w-jus">Jus</span></span>
             </div>
           </div>
         </section>
@@ -722,10 +660,9 @@
   let TOTAL = 0;           // total a pagar = guias selecionadas + taxa
 
   // Expandir / recolher cada guia
-  document.querySelectorAll('.bill').forEach(bill=>{
-    const chev = bill.querySelector('.bill-chev');
-    const main = bill.querySelector('.bill-main');
-    [chev, main].forEach(el=> el && el.addEventListener('click', ()=> bill.classList.toggle('collapsed')));
+  document.querySelectorAll('.order').forEach(o=>{
+    const head = o.querySelector('.order-head');
+    if(head) head.addEventListener('click', ()=> o.classList.toggle('collapsed'));
   });
 
   // Copiar linha digitável (por guia)
@@ -743,18 +680,13 @@
   // Botões sem backend (protótipo) — Ver/Baixar, Histórico, extrato
   document.querySelectorAll('.doc-btn, .btn-hist, .saldo-link').forEach(b=> b.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); }));
 
-  // ===== Cálculo do total conforme guias selecionadas =====
-  const checks = [...document.querySelectorAll('.bill-check:not([disabled])')];
-  function selectedSum(){
-    let s=0, n=0;
-    document.querySelectorAll('.bill').forEach(bill=>{
-      const c = bill.querySelector('.bill-check');
-      if(!c || c.disabled) return;
-      if(c.checked){ s += parseFloat(bill.dataset.valor)||0; n++; bill.classList.add('selected'); }
-      else { bill.classList.remove('selected'); }
-    });
-    return {s,n};
-  }
+  // ===== Valores da operação (guias já selecionadas no link de pagamento) =====
+  const SUBTOTAL = 1500.00;                // soma das guias: R$ 300,00 + R$ 1.200,00
+  const TAXA = SUBTOTAL * FEE_RATE;        // taxa de serviço
+  TOTAL = SUBTOTAL + TAXA;                 // total a pagar
+  const GUIAS_QTD = 2;
+  const FORNECEDOR = 'TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO';
+
   function buildParcelas(total){
     const cur = parcelas.value || '12';
     parcelas.innerHTML = PLANS.map(k=>{
@@ -762,26 +694,19 @@
       return `<option value="${k}"${String(k)===cur?' selected':''}>${k}x de ${brl(per)}${k===1?' sem juros':''}</option>`;
     }).join('');
   }
-  function refresh(){
-    const {s,n} = selectedSum();
-    const taxa = s * FEE_RATE;
-    TOTAL = s + taxa;
-    selCount.textContent = n;
-    totalPagar.textContent = brl(TOTAL);
-    sumTributo.textContent = brl(s);
-    sumTaxa.textContent = brl(taxa);
-    buildParcelas(TOTAL);
+  function installHTML(){
     const k = parseInt(parcelas.value,10)||12;
-    sumInstall.innerHTML = k===1 ? '<span class="mult">1x</span> ' + brl(TOTAL) : '<span class="mult">'+k+'x</span> ' + brl(TOTAL/k);
-    sumTotal.textContent = 'Total ' + brl(TOTAL);
-    if(s<=0){ payLabel.textContent='Selecione uma guia'; payBtnEl.style.opacity='.55'; payBtnEl.style.pointerEvents='none'; }
-    else { payLabel.textContent='Pagar ' + brl(TOTAL); payBtnEl.style.opacity=''; payBtnEl.style.pointerEvents=''; }
+    return k===1 ? '<span class="mult">1x</span> ' + brl(TOTAL) : '<span class="mult">'+k+'x</span> ' + brl(TOTAL/k);
   }
-  checks.forEach(c=> c.addEventListener('change', refresh));
-  parcelas.addEventListener('change', ()=>{
-    const k = parseInt(parcelas.value,10)||12;
-    sumInstall.innerHTML = k===1 ? '<span class="mult">1x</span> ' + brl(TOTAL) : '<span class="mult">'+k+'x</span> ' + brl(TOTAL/k);
-  });
+  function refresh(){
+    sumTributo.textContent = brl(SUBTOTAL);
+    sumTaxa.textContent = brl(TAXA);
+    buildParcelas(TOTAL);
+    sumInstall.innerHTML = installHTML();
+    sumTotal.textContent = 'Total ' + brl(TOTAL);
+    payLabel.textContent = 'Pagar ' + brl(TOTAL);
+  }
+  parcelas.addEventListener('change', ()=>{ sumInstall.innerHTML = installHTML(); });
 
   const onlyDigits = s => s.replace(/\D/g,'');
   document.getElementById('cardNum').addEventListener('input', e=>{ e.target.value = onlyDigits(e.target.value).slice(0,16).replace(/(.{4})/g,'$1 ').trim(); });
@@ -801,11 +726,7 @@
   const pad = n => String(n).padStart(2,'0');
   function agora(){ const d=new Date(); return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' · '+pad(d.getHours())+':'+pad(d.getMinutes()); }
   function novoId(){ let s=''; for(let i=0;i<8;i++) s+= Math.floor(Math.random()*16).toString(16); return '#PA-'+s.toUpperCase(); }
-  function selInfo(){
-    let n=0, fav='—';
-    document.querySelectorAll('.bill').forEach(b=>{ const c=b.querySelector('.bill-check'); if(c&&!c.disabled&&c.checked){ n++; if(fav==='—'){ const p=b.querySelector('.prov'); if(p) fav=p.textContent.trim(); } } });
-    return {n, fav};
-  }
+  function selInfo(){ return {n: GUIAS_QTD, fav: FORNECEDOR}; }
   function showSucesso(){
     const {n,fav}=selInfo();
     const k=parseInt(parcelas.value,10)||1;
