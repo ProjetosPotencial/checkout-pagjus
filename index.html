@@ -125,13 +125,15 @@
   /* ---- Resumo / pedido ---- */
   .secure-pill{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:#0e7c54;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.22);padding:5px 11px;border-radius:999px}
 
-  .order{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+  .order{border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:14px}
   .order-head{display:flex;align-items:flex-start;gap:12px;padding:18px;cursor:pointer;background:var(--grad-soft)}
   .order-head .oh-label{font-size:13px;color:var(--muted);font-weight:500}
   .order-head .oh-value{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin-top:2px}
   .oh-main{flex:1;min-width:0}
-  .due-pill{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--ink);color:#fff;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:999px}
-  .due-pill svg{opacity:.9}
+  .due-pill{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.01em;padding:5px 11px;border-radius:999px;line-height:1}
+  .due-pill svg{width:12px;height:12px;opacity:.85;flex:0 0 auto;stroke-width:1.8}
+  .due-pill.ok{background:rgba(31,157,87,.12);color:#15803D;border:1px solid rgba(31,157,87,.24)}
+  .due-pill.late{background:rgba(207,0,30,.10);color:var(--red);border:1px solid rgba(207,0,30,.22)}
 
   /* Detalhamento da guia — recolhível (lido do código de barras) */
   .conta-detail{padding:16px 18px;border-top:1px solid var(--line);max-height:420px;overflow:hidden;transition:max-height .3s ease,opacity .25s,padding .3s,border-color .3s}
@@ -403,13 +405,6 @@
           <div class="uname">Aura Tecnologia <span class="pjbadge">PJ</span></div>
           <div class="ulevel">CNPJ 12.345.678/0001-90</div>
         </div>
-        <div class="uactions">
-          <button class="iconbtn" aria-label="Configurações"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-          <button class="iconbtn" aria-label="Idioma"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></button>
-          <button class="iconbtn" aria-label="Notificações"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
-          <span class="divider-v"></span>
-          <button class="iconbtn logout" aria-label="Sair"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
-        </div>
       </div>
 
       <!-- Título da página -->
@@ -432,10 +427,7 @@
                 <div class="oh-main">
                   <div class="oh-label">Guia 1 — Outro</div>
                   <div class="oh-value">R$&nbsp;300,00</div>
-                  <span class="due-pill">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
-                    Vencimento: 16/09/2025
-                  </span>
+                  <span class="due-pill" data-venc="2025-09-16"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span class="dp-text">Vencido em 16/09/2025</span></span>
                 </div>
                 <div class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
@@ -443,13 +435,6 @@
                 <div class="ben-title">Outro — TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
                 <div class="ben-org">Tribunal Regional do Trabalho da 15ª Região</div>
                 <div class="ben-recv">Recebedor <span class="sep">|</span> CNPJ <span>03.773.700/0001-77</span></div>
-                <div class="digit-wrap">
-                  <div class="digit-label">Linha digitável</div>
-                  <div class="digit-box">
-                    <code>85840000003 5000028018 7640001052 4636237540 001831</code>
-                    <button class="digit-copy" type="button" aria-label="Copiar linha digitável"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -459,10 +444,7 @@
                 <div class="oh-main">
                   <div class="oh-label">Guia 2 — GRU Judicial</div>
                   <div class="oh-value">R$&nbsp;1.200,00</div>
-                  <span class="due-pill">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
-                    Vencimento: 20/02/2026
-                  </span>
+                  <span class="due-pill" data-venc="2026-09-30"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span class="dp-text">Vencimento: 30/09/2026</span></span>
                 </div>
                 <div class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
@@ -470,13 +452,6 @@
                 <div class="ben-title">GRU Judicial — TRIBUNAL REGIONAL DO TRABALHO DA 15A.REGIÃO</div>
                 <div class="ben-org">Tribunal Regional do Trabalho da 15ª Região</div>
                 <div class="ben-recv">Recebedor <span class="sep">|</span> CNPJ <span>03.773.700/0001-77</span></div>
-                <div class="digit-wrap">
-                  <div class="digit-label">Linha digitável</div>
-                  <div class="digit-box">
-                    <code>85853000012 2000028018 7640001052 4636237540 001831</code>
-                    <button class="digit-copy" type="button" aria-label="Copiar linha digitável"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -664,6 +639,19 @@
     const head = o.querySelector('.order-head');
     if(head) head.addEventListener('click', ()=> o.classList.toggle('collapsed'));
   });
+
+  // Estado do pill de vencimento: verde (no prazo) ou vermelho (vencido)
+  (function(){
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    document.querySelectorAll('.due-pill[data-venc]').forEach(pill=>{
+      const [y,m,d] = pill.getAttribute('data-venc').split('-').map(Number);
+      const venc = new Date(y, m-1, d);
+      const br = String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0')+'/'+y;
+      const txt = pill.querySelector('.dp-text');
+      if(venc >= hoje){ pill.classList.add('ok'); if(txt) txt.textContent = 'Vencimento: '+br; }
+      else { pill.classList.add('late'); if(txt) txt.textContent = 'Vencido em '+br; }
+    });
+  })();
 
   // Copiar linha digitável (por guia)
   document.querySelectorAll('.digit-copy').forEach(btn=>{
